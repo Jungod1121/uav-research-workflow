@@ -14,11 +14,48 @@ from pathlib import Path
 import argparse
 
 
+def find_bag(bags_dir: Path, name: str):
+    """定位 rosbag2 产物：bags/<name>/ 是目录(内含 *_0.db3 或 *.mcap)，旧版也可能是单文件。"""
+    cand_dir = bags_dir / name
+    if cand_dir.is_dir():
+        for pat in ("*.mcap", "*_0.db3", "*.db3"):
+            hits = sorted(cand_dir.glob(pat))
+            if hits:
+                return hits[0]
+    for pat in (f"{name}.mcap", f"{name}_0.db3", f"{name}.db3", "*.mcap", "*_0.db3"):
+        hits = sorted(bags_dir.glob(pat))
+        if hits:
+            return hits[0]
+    return None
+
+
 def load_metrics(exp_dir: Path):
     m = exp_dir / "metrics.json"
     if m.exists():
         return json.loads(m.read_text())
     return None
+
+
+def _px4_typestore():
+    """构造含 px4_msgs 自定义类型的 typestore（从源码 .msg 文件注册）。"""
+    from rosbags.typesys import Stores, get_typestore, get_types_from_msg
+    store = get_typestore(Stores.ROS2_HUMBLE)
+    msg_dirs = [
+        Path.home() / "px4_ros2_ws/src/px4_msgs/msg",
+        Path("/opt/ros/humble/share/px4_msgs/msg"),
+    ]
+    add = {}
+    for d in msg_dirs:
+        if d.is_dir():
+            for f in sorted(d.glob("*.msg")):
+                try:
+                    add.update(get_types_from_msg(f.read_text(), f"px4_msgs/msg/{f.stem}"))
+                except Exception:
+                    pass
+            break
+    if add:
+        store.register(add)
+    return store
 
 
 def read_bag_trajectory(bag_path: Path):
@@ -28,7 +65,8 @@ def read_bag_trajectory(bag_path: Path):
     except ImportError:
         return None, "rosbags 库未安装 (pip install rosbags)"
     try:
-        with AnyReader([bag_path]) as reader:
+        target = bag_path.parent if (bag_path.parent / "metadata.yaml").exists() else bag_path
+        with AnyReader([target], default_typestore=_px4_typestore()) as reader:
             conns = [c for c in reader.connections if c.topic == "/fmu/out/vehicle_local_position"]
             if not conns:
                 return None, "bag 中无 /fmu/out/vehicle_local_position"
@@ -96,11 +134,8 @@ def main():
 
     # ---- 轨迹图 ----
     lines += ["", "## Trajectory", ""]
-    bags = sorted((exp / "bags").glob(f"{args.bag}.*"))
-    bag_base = bags[0].with_suffix("") if bags else None
-    traj, err = (None, "未找到 bag 文件") if not bag_base else (None, None)
-    if bag_base:
-        traj, err = read_bag_trajectory(bag_base)
+    bag_path = find_bag(exp / "bags", args.bag)
+    traj, err = (None, "未找到 bag 文件") if not bag_path else read_bag_trajectory(bag_path)
     png = exp / "traj_plot.png"
     if traj:
         try:
