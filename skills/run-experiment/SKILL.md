@@ -29,7 +29,8 @@ description: 编排并执行一次 UAV 仿真实验：启动 PX4 SITL + Gazebo �
 | 要素 | 缺省 | 说明 |
 |---|---|---|
 | 任务 | square（方框航点） | 对应 `scripts/` 内 mission 配置 |
-| 配置覆盖 | 无 | Hydra 风格 key=value 列表，如 `mission.side_length=4.0 speed=1.5` |
+| 配置覆盖 | 无 | Hydra 风格 key=value 列表 |
+| **血缘** | 无 | `PROPOSAL_ID`/`GAP_CELL_ID`/`HYPOTHESIS`/`PARENT_EXP`(env 传入)；有开题产物时必填 proposal_id，验证性实验至少给 HYPOTHESIS |
 | 录制时长 | 任务自动结束 | 上限 10 分钟保险 |
 | 视觉采样 | 每 5s 一帧 | RViz/Gazebo 截图 |
 
@@ -70,7 +71,7 @@ experiments/$EXP_ID/
 ## 收尾
 
 1. 运行 `python3 scripts/obs_pack.py experiments/$EXP_ID` 生成观察包；
-2. 把控制权交给 `analyze-results` skill 做分析；
+2. 运行 `python3 scripts/exp_index.py` 刷新关系表；3. 把控制权交给 `analyze-results` skill 做分析；
 3. 按 `templates/experiment_log.md` 写一条实验记录到 notes/（若用户开启笔记功能）。
 
 ## 失败处理约定

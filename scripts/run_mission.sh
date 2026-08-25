@@ -14,6 +14,7 @@ EXP_DIR="$WF_DIR/experiments/$EXP_ID"
 mkdir -p "$EXP_DIR"/{bags,views,logs}
 METRICS="$EXP_DIR/metrics.json"
 
+
 # ---- 参数解析（Hydra 风格 k=v，缺省值在此钉死）----
 SIDE=4.0 HEIGHT=2.5 SPEED=1.5 WP_TOL=0.35 DUR=600 VIEW_EVERY=5
 for kv in "$@"; do
@@ -25,6 +26,14 @@ for kv in "$@"; do
   esac
 done
 echo "[mission] config: side=$SIDE height=$HEIGHT speed=$SPEED wp_tol=$WP_TOL view_every=$VIEW_EVERY"
+
+# ---- 血缘 metadata（P1: proposal/gap-cell/hypothesis/parent 经 env 传入, 缺省 null）----
+python3 "$WF_DIR/scripts/exp_metadata.py" write "$EXP_DIR" "$MISSION" \
+  ${PROPOSAL_ID:+--proposal "$PROPOSAL_ID"} \
+  ${GAP_CELL_ID:+--gap-cell "$GAP_CELL_ID"} \
+  ${HYPOTHESIS:+--hypothesis "$HYPOTHESIS"} \
+  ${PARENT_EXP:+--parent "$PARENT_EXP"} ${ITER_ROUND:+--round "$ITER_ROUND"} \
+  --config "side=$SIDE" "height=$HEIGHT" "speed=$SPEED" "wp_tol=$WP_TOL" "dur=$DUR" "view_every=$VIEW_EVERY"
 
 set +u   # ROS setup.bash 不兼容 nounset
 source /opt/ros/humble/setup.bash

@@ -19,7 +19,8 @@ description: 闭环驱动实验迭代：根据 analyze-results 的诊断自动�
 │ 1. 读上一轮 diagnosis_report.md 的"下一步建议"   │
 │ 2. 制定本轮改动：Hydra 风格 key=value 覆盖列表    │
 │    （每轮改动 ≤2 个变量——一次改太多无法归因）      │
-│ 3. run-experiment 执行（配置覆盖传入）            │
+│ 3. run-experiment 执行（配置覆盖+PARENT_EXP=上轮  │
+│    EXP_ID, ITER_ROUND=轮次 传入）                  │
 │ 4. analyze-results 出诊断                        │
 │ 5. 对比目标函数：改善/持平/恶化                   │
 │ 6. 记录到 iterations.md（见下）                  │
