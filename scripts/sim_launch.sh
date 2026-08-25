@@ -19,9 +19,9 @@ for arg in "$@"; do
 done
 
 export ROS_DOMAIN_ID=77          # 本工作流固定域，避免 DDS 串台
-export ROS_LOCALHOST_ONLY=1      # 强制 DDS 走回环
-export FASTDDS_BUILTIN_TRANSPORTS=UDPv4  # 禁用 SHM 传输: 残留共享内存段会导致数据交换间歇性挂起
-export GZ_IP=127.0.0.1          # gz-transport 发现统一钉回环: 桥(127.0.0.1)与 server 必须同接口, 否则传感器数据永远过不去: 规避 Clash TUN 等虚拟网卡劫持组播发现
+# [BISECT-DISABLED] export ROS_LOCALHOST_ONLY=1      # 强制 DDS 走回环
+# [BISECT-DISABLED] export FASTDDS_BUILTIN_TRANSPORTS=UDPv4  # 禁用 SHM 传输
+# [BISECT-DISABLED] export GZ_IP=127.0.0.1  # 统一发现接口
 export GZ_VERSION=harmonic       # ros_gz / 工具链提示
 
 # GL 自愈: NVIDIA 驱动/库版本不匹配(unattended-upgrades 后未重启的典型症状)时
@@ -96,13 +96,15 @@ while [ $ATTEMPTS -lt 3 ]; do
   done
   [ "$READY" = "1" ] && break
 done
+# 探针放弃时保留栈(杀栈会误伤正在运行的实验); 只如实报告
+if [ "$READY" != "1" ]; then
+  echo "[launch] WARN_STACK_UP_NO_DATA — 栈保持运行, 数据流未通(勿在此状态跑任务)"
+  exit 2
+fi
 if [ "$READY" = "1" ]; then
-  echo "[launch] READY — /fmu topics visible ( waited ${i}s )"
-  echo "[launch] logs: $LOG_DIR/{px4,xrce,rviz}.log"
+  echo "[launch] READY — 数据流已通 ( waited ${i}s )"
   exit 0
 else
-  echo "[launch] TIMEOUT — last px4.log lines:"
-  tail -50 "$LOG_DIR/px4.log" || true
-  "$WF_DIR/scripts/sim_stop.sh" || true
-  exit 1
+  echo "[launch] UNREACHABLE"
+  exit 3
 fi
