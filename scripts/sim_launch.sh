@@ -21,6 +21,14 @@ done
 export ROS_DOMAIN_ID=77          # 本工作流固定域，避免 DDS 串台
 export GZ_VERSION=harmonic       # ros_gz / 工具链提示
 
+# GL 自愈: NVIDIA 驱动/库版本不匹配(unattended-upgrades 后未重启的典型症状)时
+# GLX 应用(rviz2/gz GUI)会崩。检测到则强制 GLX 走 Mesa 软渲染兜底(根治=重启机器)。
+# 注意用 /proc/modules 而非 lsmod(setsid 环境 PATH 可能无 sbin)
+if ! nvidia-smi >/dev/null 2>&1 && grep -q "^nvidia" /proc/modules 2>/dev/null; then
+  export __GLX_VENDOR_LIBRARY_NAME=mesa LIBGL_ALWAYS_SOFTWARE=1
+  echo "[launch] NVIDIA 驱动不匹配 -> GLX 回退 Mesa 软渲染 (根治请重启)"
+fi
+
 echo "[launch] pre-clean check..."
 "$WF_DIR/scripts/sim_stop.sh" >/dev/null 2>&1 || true
 
@@ -49,21 +57,21 @@ PX4_DIR="$HOME/PX4-Autopilot"
 [ -d "$PX4_DIR" ] || { echo "ERROR: $PX4_DIR not found — 先执行 provision.sh 或见 experiment-setup skill"; exit 1; }
 
 LAUNCH_ENV=()
-if [ "$HEADLESS" = "1" ]; then LAUNCH_ENV+=(HEADLESS=1); fi
-# 必须用 make 协调启动(它负责 gz server+px4+lockstep 握手的时序)。
-# 手动分离启动会破坏 lockstep: 世界被桥接暂停后传感器系统不激活。
-# stdin 必须保持打开: EOF 会让 px4 shell 疯狂刷提示符(10GB级日志), 用 tail -f 喂住
-( cd "$PX4_DIR" && env "${LAUNCH_ENV[@]}" tail -f /dev/null | \
+# server 恒 HEADLESS: `gz sim -r`(server+GUI 同进程) 在 GLX 异常时会连 server 一起带崩。
+# GUI 客户端在 READY 后分离启动(带 GL 兜底 env), 崩了也不影响仿真。
+( cd "$PX4_DIR" && env HEADLESS=1 "${LAUNCH_ENV[@]}" tail -f /dev/null | \
     make px4_sitl gz_x500 >"$LOG_DIR/px4.log" 2>&1 & )
 
-# ---- 3. RViz（可选）----------------------------------------------------
-if [ "$RVIZ" = "1" ]; then
-  if [ -n "${DISPLAY:-}" ]; then
-    (sleep 8 && rviz2 ${RVIZ_CFG:+-d "$RVIZ_CFG"} >"$LOG_DIR/rviz.log" 2>&1 &)
-    echo "[launch] rviz2 queued (DISPLAY=$DISPLAY)"
-  else
-    echo "[launch] WARN: no DISPLAY, skipping rviz2 (截图通道将不可用，可用 Xvfb 替代)"
-  fi
+# ---- 3. GUI 客户端（可选, READY 后分离启动, 崩溃不影响仿真）----------------
+if [ "$RVIZ" = "1" ] && [ -n "${DISPLAY:-}" ]; then
+  (sleep 10 && rviz2 ${RVIZ_CFG:+-d "$RVIZ_CFG"} >"$LOG_DIR/rviz.log" 2>&1 &)
+  echo "[launch] rviz2 queued (DISPLAY=$DISPLAY)"
+else
+  [ "$RVIZ" = "1" ] && echo "[launch] WARN: no DISPLAY, skip rviz2"
+fi
+if [ "$HEADLESS" != "1" ] && [ -n "${DISPLAY:-}" ]; then
+  (sleep 14 && gz sim -g -v 0 >"$LOG_DIR/gzgui.log" 2>&1 &)
+  echo "[launch] gz GUI client queued"
 fi
 
 # ---- 4. READY 探测：等 /fmu/out 话题出现 -------------------------------
