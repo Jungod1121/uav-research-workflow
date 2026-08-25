@@ -43,14 +43,14 @@ def generate_launch_description():
         output="log",
     )
 
-    px4_delayed = TimerAction(period="2.0s", actions=[px4])
+    px4_delayed = TimerAction(period=2.0, actions=[px4])
 
     # 3) rviz2(可选可视化, 崩溃不影响栈; 默认关, 用 rviz:=true 开)
     rviz = Node(
         package="rviz2", executable="rviz2", output="log",
         condition=IfConditionLaunchArg("rviz"),
     )
-    rviz_delayed = TimerAction(period="10.0s", actions=[rviz])
+    rviz_delayed = TimerAction(period=10.0, actions=[rviz])
 
     return LaunchDescription([
         DeclareLaunchArg("rviz", default_value="false"),
