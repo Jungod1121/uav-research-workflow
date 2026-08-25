@@ -1,0 +1,10 @@
+# gap-watch 关注格子（2-5 个为宜，多了会噪音化）
+cells:
+  - name: VLA_x_GPS-denied
+    axis_a: {axis: method, node: VLA}
+    axis_b: {axis: environment, node: GPS-denied}
+    alert_threshold: 2
+  # - name: RL_x_DynamicObstacle
+  #   axis_a: {axis: method, node: Reinforcement Learning}
+  #   axis_b: {axis: environment, node: Dynamic obstacle avoidance}
+  #   alert_threshold: 3

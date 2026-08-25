@@ -1,0 +1,7 @@
+[Unit]
+Description=UAV gap watch daily diff
+After=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=%h/work/uav-research-workflow/scripts/gap_watch.py
