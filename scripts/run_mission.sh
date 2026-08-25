@@ -41,6 +41,7 @@ source /opt/ros/humble/setup.bash
 set -u
 export ROS_DOMAIN_ID=77
 export ROS_LOCALHOST_ONLY=1
+export FASTDDS_BUILTIN_TRANSPORTS=UDPv4
 
 # ---- 1. 启动 rosbag 录制（关键 fmu 话题 + tf）----
 TOPICS="/fmu/out/vehicle_local_position /fmu/out/vehicle_attitude /fmu/out/vehicle_odometry \
