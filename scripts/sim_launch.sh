@@ -77,15 +77,20 @@ fi
 # ---- 4. READY 探测：等 /fmu/out 话题出现 -------------------------------
 # 坑: ros2 CLI daemon 缓存启动时的 ROS_DOMAIN_ID, 域变更后永远发现不了话题 → 探针死等。
 # 探测前强制重启 daemon, 且每次调用加 timeout 防挂死。
-ros2 daemon stop >/dev/null 2>&1 || true
-echo "[launch] waiting for READY (px4 <-> agent <-> ROS2)..."
-READY=0
-for i in $(seq 1 60); do   # 最长 ~5 分钟
-  # 探测数据流而非话题存在(uxrce 会预创建全部 writer, 话题在无数据时也可发现)
-  if timeout 12 ros2 topic hz /fmu/out/sensor_combined --window 5 2>/dev/null | grep -q "min"; then
-    READY=1; break
-  fi
-  sleep 1
+ATTEMPTS=0
+while [ $ATTEMPTS -lt 3 ]; do
+  ATTEMPTS=$((ATTEMPTS+1))
+  [ $ATTEMPTS -gt 1 ] && { echo "[launch] 第 $ATTEMPTS 次尝试(数据流未通,整栈重启)"; ./scripts/sim_stop.sh >/dev/null 2>&1; sleep 3
+    ( cd "$PX4_DIR" && env HEADLESS=1 tail -f /dev/null | make px4_sitl gz_x500 >"$LOG_DIR/px4.log" 2>&1 & ); }
+  ros2 daemon stop >/dev/null 2>&1 || true
+  READY=0
+  for i in $(seq 1 40); do
+    if timeout 12 ros2 topic hz /fmu/out/sensor_combined --window 5 2>/dev/null | grep -q "min"; then
+      READY=1; break
+    fi
+    sleep 1
+  done
+  [ "$READY" = "1" ] && break
 done
 if [ "$READY" = "1" ]; then
   echo "[launch] READY — /fmu topics visible ( waited ${i}s )"
