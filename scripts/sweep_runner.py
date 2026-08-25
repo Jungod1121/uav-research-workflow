@@ -23,10 +23,17 @@ def main():
     total = len(combos) * len(seeds)
     print(f"[sweep:{name}] 组合数={len(combos)} x seeds={len(seeds)} = {total} 次运行")
     print("[sweep] 前置: 确保仿真栈就绪(幂等)...")
-    pre = subprocess.run(["./scripts/sim_launch.sh", "--headless"], cwd=WF,
-                         capture_output=True, text=True, timeout=480)
-    if "READY" not in pre.stdout:
-        print("SWEEP_ABORTED stack not ready"); return 1
+    # 先探测: 栈已健康则跳过 sim_launch(避免杀掉正常工作的栈重来)
+    probe = subprocess.run(["bash", "-c",
+        "source /opt/ros/humble/setup.bash && source ~/px4_ros2_ws/install/setup.bash && "
+        "export ROS_DOMAIN_ID=77 && timeout 15 ros2 topic hz /fmu/out/sensor_combined --window 10 2>&1"],
+        capture_output=True, text=True, timeout=30, cwd=WF)
+    if "min" not in probe.stdout:
+        pre = subprocess.run(["./scripts/sim_launch.sh", "--headless"], cwd=WF,
+                             capture_output=True, text=True, timeout=480)
+        if "READY" not in pre.stdout:
+            print("SWEEP_ABORTED stack not ready"); return 1
+    print("[sweep] 栈就绪")
 
     stamp = time.strftime("%Y%m%d-%H%M%S")
     sweep_dir = WF / "experiments" / f"{stamp}-{mission}-sweep-{name}"

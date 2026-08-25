@@ -75,10 +75,13 @@ if [ "$HEADLESS" != "1" ] && [ -n "${DISPLAY:-}" ]; then
 fi
 
 # ---- 4. READY 探测：等 /fmu/out 话题出现 -------------------------------
+# 坑: ros2 CLI daemon 缓存启动时的 ROS_DOMAIN_ID, 域变更后永远发现不了话题 → 探针死等。
+# 探测前强制重启 daemon, 且每次调用加 timeout 防挂死。
+ros2 daemon stop >/dev/null 2>&1 || true
 echo "[launch] waiting for READY (px4 <-> agent <-> ROS2)..."
 READY=0
-for i in $(seq 1 120); do   # 最长 ~4 分钟（ros2 CLI 每轮约 1-2s）
-  if ros2 topic list 2>/dev/null | grep -q "^/fmu/out/"; then
+for i in $(seq 1 60); do   # 最长 ~5 分钟
+  if timeout 15 ros2 topic list 2>/dev/null | grep -q "^/fmu/out/"; then
     READY=1; break
   fi
   sleep 1
