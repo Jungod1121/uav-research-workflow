@@ -13,7 +13,6 @@ from pathlib import Path
 
 from launch import LaunchDescription
 from launch.actions import ExecuteProcess, TimerAction
-from launch_ros.actions import Node
 
 PX4_DIR = Path.home() / "PX4-Autopilot"
 AGENT_BIN = Path.home() / "Micro-XRCE-DDS-Agent" / "build" / "MicroXRCEAgent"
@@ -45,28 +44,4 @@ def generate_launch_description():
 
     px4_delayed = TimerAction(period=2.0, actions=[px4])
 
-    # 3) rviz2(可选可视化, 崩溃不影响栈; 默认关, 用 rviz:=true 开)
-    rviz = Node(
-        package="rviz2", executable="rviz2", output="log",
-        condition=IfConditionLaunchArg("rviz"),
-    )
-    rviz_delayed = TimerAction(period=10.0, actions=[rviz])
-
-    return LaunchDescription([
-        DeclareLaunchArg("rviz", default_value="false"),
-        agent,
-        px4_delayed,
-        rviz_delayed,
-    ])
-
-
-def DeclareLaunchArg(name, default_value):
-    from launch.actions import DeclareLaunchArgument as _D
-    from launch.substitutions import LaunchConfiguration as _C
-    return _D(name, default_value=default_value), _C(name)
-
-
-def IfConditionLaunchArg(name):
-    from launch.conditions import IfCondition
-    from launch.substitutions import LaunchConfiguration as _C
-    return IfCondition(_C(name))
+    return LaunchDescription([agent, px4_delayed])
