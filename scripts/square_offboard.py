@@ -36,9 +36,10 @@ class SquareOffboard(Node):
                                                    self.on_status, QOS_BEST_EFFORT)
         self.nav_state = None
 
-        # 方框航点（相对起飞点，NED: x 北 y 东）
+        # 方框航点（相对起飞点，NED: x 北 y 东）—— 每边插中点, 拽直位置阶跃控制的长边弧线
         s = self.side
-        self.waypoints = [(s, 0.0), (s, s), (0.0, s), (0.0, 0.0)]
+        self.waypoints = [(s / 2, 0.0), (s, 0.0), (s, s / 2), (s, s),
+                          (s / 2, s), (0.0, s), (0.0, s / 2), (0.0, 0.0)]
         self.metrics = {"side": s, "height": self.height, "speed": self.speed,
                         "waypoints": [], "events": []}
         self.pos = None
