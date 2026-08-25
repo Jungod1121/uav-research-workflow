@@ -116,3 +116,9 @@ mkdir -p ~/ai-skills && git clone https://github.com/Yuan1z0825/nature-skills.gi
 - 「连续 N 轮」等 gate 是会话约定（我遵守 SKILL.md），非进程级硬保证；无人值守需求出现时再加薄 runner
 - 提醒 ≠ 结论：gap-watch 只报变化，判断在人
 - AI 不代替选题决策与方法设想（proposal 第 4 章留白给作者）
+
+## v2 架构（2026-08-26，用户方向：先单机、可复现）
+- 编排从 bash 手搓改为 `ros2 launch launch/sim_stack.launch.py`（声明式、进程树受管、干净关停）
+- PX4 SITL 自己管理 gz server 生命周期（rcS 内建），上层不再抢
+- 任务层最小化：mission_takeoff_hold.py（起飞+位置保持）先行，方框/多机在其上叠加
+- 待做：Docker 化（别人一条命令部署）——需宿主装 docker
