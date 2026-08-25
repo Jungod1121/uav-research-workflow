@@ -33,8 +33,8 @@ set -u
 export ROS_DOMAIN_ID=77
 
 # ---- 1. 启动 rosbag 录制（关键 fmu 话题 + tf）----
-TOPICS="/fmu/out/vehicle_local_position /fmu/out/vehicle_attitude \
-/fmu/out/vehicle_local_position_setpoint /fmu/out/vehicle_status \
+TOPICS="/fmu/out/vehicle_local_position /fmu/out/vehicle_attitude /fmu/out/vehicle_odometry \
+/fmu/out/vehicle_control_mode /fmu/out/vehicle_status_v1 \
 /fmu/out/sensor_combined"
 ros2 bag record -o "$EXP_DIR/bags/flight" $TOPICS \
   >"$EXP_DIR/logs/bag.log" 2>&1 &   # Humble 无 mcap 插件, 用默认 sqlite3

@@ -32,7 +32,7 @@ class SquareOffboard(Node):
         self.cmd_pub = self.create_publisher(VehicleCommand, "/fmu/in/vehicle_command", 10)
         self.pos_sub = self.create_subscription(VehicleLocalPosition, "/fmu/out/vehicle_local_position",
                                                 self.on_pos, QOS_BEST_EFFORT)
-        self.status_sub = self.create_subscription(VehicleStatus, "/fmu/out/vehicle_status",
+        self.status_sub = self.create_subscription(VehicleStatus, "/fmu/out/vehicle_status_v1",
                                                    self.on_status, QOS_BEST_EFFORT)
         self.nav_state = None
 
