@@ -1,0 +1,22 @@
+{
+  "mcpServers": {
+    "mcp-rosbags": {
+      "command": "/home/jungod/ai-skills/mcp-rosbags/venv/bin/python",
+      "args": ["/home/jungod/ai-skills/mcp-rosbags/src/server.py"],
+      "env": {
+        "PYTHONPATH": "/home/jungod/ai-skills/mcp-rosbags/src",
+        "MCP_ROSBAG_DIR": "/home/jungod/work/uav-research-workflow/experiments"
+      }
+    },
+    "ros-mcp": {
+      "command": "bash",
+      "args": [
+        "-c",
+        "source /opt/ros/humble/setup.bash && exec /home/jungod/ai-skills/ros-mcp/venv/bin/python /home/jungod/ai-skills/ros-mcp/ros-general.py"
+      ],
+      "env": {
+        "ROS_DOMAIN_ID": "77"
+      }
+    }
+  }
+}

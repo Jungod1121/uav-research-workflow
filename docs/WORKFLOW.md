@@ -48,20 +48,21 @@ sim_stop.sh                            # 干净关停(含进程清理验证)
 | rosbags-mcp | bag 结构化查询: analyze_trajectory / get_image_at_time / plot_timeseries / tf_tree | 见 §MCP 安装 |
 | ros-mcp | 实时 ROS2: 发话题/调服务/控 Gazebo/RViz、进程编排 | 见 §MCP 安装 |
 
-#### §MCP 安装
-```bash
-# 1) rosbags-mcp（Python, 无需 ROS 运行时）
-git clone https://github.com/nqanh/rosbags-mcp ~/ai-skills/rosbags-mcp   # 以实际 repo 为准
-cd ~/ai-skills/rosbags-mcp && python3 -m pip install -e .
+#### §MCP 安装（已接入，2026-08-25 实测）
 
-# 2) ros-mcp（需 ROS 环境已 source）
-git clone https://github.com/ros-mcp/ros-mcp ~/ai-skills/ros-mcp         # 以实际 repo 为准
-cd ~/ai-skills/ros-mcp && python3 -m pip install -e .
+| Server | 仓库 | 钉版 | 冒烟验证 |
+|---|---|---|---|
+| mcp-rosbags | `binabik-ai/mcp-rosbags`（论文官方） | venv: `rosbags==0.9.23` + `mcp==1.12.4` | INIT OK, 15 tools |
+| ros-mcp | `Yutarop/ros-mcp`（Humble CI） | venv: `mcp==1.9.4` | INIT OK, 24 tools |
 
-# 3) 注册到 agent —— 本仓库 .mcp.json 已含模板；Claude Code 项目级自动加载；
-#    opencode 写入 ~/.config/opencode/opencode.json 的 mcp 段（命令相同）。
-```
-> 兼容性备注：ros-mcp 对 Humble 的支持在接入时实测；若不兼容，数据通道用 rosbags-mcp + obs_pack 截图兜底，ros-mcp 保持文档化。
+> ⚠️ 版本教训：`rosbags≥0.10` 移除了 `deserialize_cdr`；`mcp 2.x` 破坏了 lowlevel API——**升级前先在 venv 里重跑冒烟测试**：
+> ```bash
+> printf '%s\n' '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2024-11-05","capabilities":{},"clientInfo":{"name":"t","version":"0"}}}' '{"jsonrpc":"2.0","id":2,"method":"tools/list"}' \
+>   | <server启动命令> | python3 -c "import sys,json; [print(json.loads(l).get('id'), 'OK' if 'result' in json.loads(l) else 'ERR') for l in sys.stdin if l.strip()]"
+> ```
+
+配置：本仓库 `.mcp.json` 已写好（Claude Code 项目级自动加载）。opencode 用户把同结构写入 `~/.config/opencode/opencode.json` 的 `mcp` 段。
+ros-mcp 的 GUI 类工具（launch_gazebo/launch_rviz）依赖其 socket_server（localhost:8765）在桌面会话中运行；核心 topic/service 工具不依赖。
 
 ## 4. 论文写作与投稿（vendor skills，当前仅文档化）
 
