@@ -25,13 +25,13 @@ BASE = [
 ]
 
 
-def upcoming(years=2):
+def upcoming(years=3):
     today = dt.date.today()
     rows = []
     for name, md, note, url in BASE:
         if md is None:
             rows.append((name, None, note, url)); continue
-        for y in (today.year, today.year + years):
+        for y in range(today.year, today.year + years):
             d = dt.date(y, *md)
             if d >= today:
                 rows.append((name, d, note, url))
@@ -110,9 +110,14 @@ def main():
           "\n> 提示: ICRA 通常 9 月中旬截稿——9 月是论文冲刺期。")
 
     if args.ics:
-        allrows = [(n, dt.date.fromisoformat(d[:10]), s, u) for n, d, s, u in
-                   [(a, b, c, e) for a, b, c, e in fetched] if d] or local
-        write_ics(open(args.ics, "w").name and __import__("pathlib").Path(args.ics), local)
+        from pathlib import Path
+        rows = []
+        for name, d, note, url in fetched:
+            try:
+                rows.append((name, dt.date.fromisoformat(d[:10]), note, url))
+            except Exception:
+                continue
+        write_ics(Path(args.ics), rows or local)
         print(f"\nICS written: {args.ics}")
 
 

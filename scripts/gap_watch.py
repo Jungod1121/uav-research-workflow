@@ -21,56 +21,44 @@ ATLAS = "http://localhost:8000"
 
 
 def load_watchlist():
-    """极简 YAML 解析（仅支持本 watchlist 的两层级结构），避免强依赖 PyYAML。"""
     if not WATCHLIST.exists():
         print(f"ERROR: {WATCHLIST} 不存在，参考 skills/gap-watch/SKILL.md 创建"); sys.exit(1)
-    cells, cur = [], None
-    for raw in WATCHLIST.read_text().splitlines():
-        line = raw.split("#", 1)[0].rstrip()
-        if not line.strip():
-            continue
-        s = line.strip()
-        if s.startswith("- name:"):
-            cur = {"name": s.split(":", 1)[1].strip()}
-            cells.append(cur)
-        elif cur is not None and ":" in s:
-            k, v = (x.strip() for x in s.split(":", 1))
-            if k == "axis_a" or k == "axis_b":
-                cur[k] = {}          # 子块由下面 axis/node 行填充
-            elif s.startswith(("axis:", "node:")):
-                target = cur.get("axis_a") if cur.get("axis_a") is not None else None
-                # 判断当前属于 a 还是 b：a 已有两个 key 则写入 b
-                tgt = "axis_b" if len(cur.get("axis_a", {}) or {}) >= 2 and "node" in (cur.get("axis_a") or {}) else "axis_a"
-                if cur.get("axis_a") and "axis" in cur["axis_a"] and "node" in cur["axis_a"]:
-                    tgt = "axis_b"
-                cur.setdefault(tgt, {})[k] = v
-            elif k == "alert_threshold":
-                cur[k] = int(v)
-    return [c for c in cells if c.get("name")]
+    try:
+        import yaml
+        data = yaml.safe_load(WATCHLIST.read_text()) or {}
+        cells = data.get("cells") or []
+        return [c for c in cells if c.get("name")]
+    except ImportError:
+        print("ERROR: 需要 PyYAML（pip install pyyaml）"); sys.exit(1)
 
 
 def taxonomy_index():
-    with urllib.request.urlopen(f"{ATLAS}/api/taxonomy", timeout=15) as r:
+    """返回 {(axis, label_lower): node_id}。兼容 Atlas 真实结构:
+    {"axes": {axis: {"label":..., "tree": [{"id","label","axis","children":[]}]}}}"""
+    with urllib.request.urlopen(f"{ATLAS}/api/taxonomy", timeout=30) as r:
         data = json.loads(r.read())
     idx = {}
 
     def walk(nodes):
         for n in nodes or []:
-            idx[n["label"].lower()] = n["id"]
+            if n.get("id"):
+                idx[(n.get("axis", ""), n["label"].lower())] = n["id"]
             walk(n.get("children"))
-    if isinstance(data, dict):
-        for axis, nodes in data.items():
-            walk(nodes)
-    else:
-        walk(data)
+    for axis, block in (data.get("axes") or {}).items():
+        if isinstance(block, dict):
+            walk(block.get("tree"))
+        elif isinstance(block, list):
+            walk(block)
     return idx
 
 
 def cell_count(cell, tax_idx):
-    a = tax_idx.get(cell["axis_a"]["node"].lower())
-    b = tax_idx.get(cell["axis_b"]["node"].lower())
+    a = tax_idx.get((cell["axis_a"]["axis"], cell["axis_a"]["node"].lower()))
+    b = tax_idx.get((cell["axis_b"]["axis"], cell["axis_b"]["node"].lower()))
     if not a or not b:
-        raise KeyError(f"节点找不到 id: {cell['name']}")
+        missing = [x for x in (cell["axis_a"]["node"], cell["axis_b"]["node"])
+                   if x.lower() not in {lbl for (_, lbl) in tax_idx}]
+        raise KeyError(f"节点不存在(检查大小写): {missing}")
     url = f"{ATLAS}/api/gap/{a}/{b}"
     try:
         with urllib.request.urlopen(url, timeout=20) as r:
