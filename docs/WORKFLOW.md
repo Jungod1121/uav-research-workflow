@@ -106,7 +106,12 @@ mkdir -p ~/ai-skills && git clone https://github.com/Yuan1z0825/nature-skills.gi
 - **换机恢复**：新机装 ROS2 Humble → `./scripts/provision.sh` → `restic restore`
 - **W&B**：训练类实验第一天接入；run id 写进 experiment_log 与 metrics.json，双向可查
 
-## 6. 诚实边界
+## 6. 路线图（排期不实施）
+
+- **results-to-paper 聚合 skill**（触发条件: 第一批论文级数据就位）: 从多实验目录(尤其 sweep summary.csv)聚合出论文图表; metadata.json 即数据契约
+- **W&B 接入**（触发条件: RL/训练类实验启动）: 训练曲线/超参对比, run id 写入 metadata.json
+
+## 7. 诚实边界
 
 - 「连续 N 轮」等 gate 是会话约定（我遵守 SKILL.md），非进程级硬保证；无人值守需求出现时再加薄 runner
 - 提醒 ≠ 结论：gap-watch 只报变化，判断在人

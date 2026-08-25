@@ -1,0 +1,7 @@
+[Unit]
+Description=UAV workflow weekly smoke test
+After=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=%h/work/uav-research-workflow/scripts/smoke_test.sh
