@@ -19,6 +19,7 @@ for arg in "$@"; do
 done
 
 export ROS_DOMAIN_ID=77          # 本工作流固定域，避免 DDS 串台
+export ROS_LOCALHOST_ONLY=1      # 强制 DDS 走回环: 规避 Clash TUN 等虚拟网卡劫持组播发现
 export GZ_VERSION=harmonic       # ros_gz / 工具链提示
 
 # GL 自愈: NVIDIA 驱动/库版本不匹配(unattended-upgrades 后未重启的典型症状)时
