@@ -24,18 +24,22 @@ export GZ_VERSION=harmonic       # ros_gz / 工具链提示
 echo "[launch] pre-clean check..."
 "$WF_DIR/scripts/sim_stop.sh" >/dev/null 2>&1 || true
 
+set +u   # ROS setup.bash 不兼容 nounset
 source /opt/ros/humble/setup.bash
 [ -f "$HOME/px4_ros2_ws/install/setup.bash" ] && source "$HOME/px4_ros2_ws/install/setup.bash"
+set -u
 unset GZ_SIM_RESOURCE_PATH SDF_PATH || true   # 防 ArduPilot 等环境残留（见 experiment-setup 坑表）
 export PX4_GZ_NO_FOLLOW=1                     # 关闭默认跟随相机（坑清单#1）
 
-PIDS=()
-
 # ---- 1. uXRCE-DDS Agent -------------------------------------------------
+# 优先用静态链接的本地构建（/usr/local 的副本可能缺 .so，见 experiment-setup 坑表）
+AGENT_BIN="$HOME/Micro-XRCE-DDS-Agent/build/MicroXRCEAgent"
+[ -x "$AGENT_BIN" ] || AGENT_BIN="$(command -v MicroXRCEAgent || true)"
+[ -n "$AGENT_BIN" ] || { echo "ERROR: MicroXRCEAgent 未找到"; exit 1; }
+
 if ! pgrep -x MicroXRCEAgent >/dev/null; then
-  (MicroXRCEAgent udp4 -p 8888 >"$LOG_DIR/xrce.log" 2>&1 &)
-  PIDS+=($!)
-  echo "[launch] MicroXRCEAgent starting (udp4:8888)"
+  ("$AGENT_BIN" udp4 -p 8888 >"$LOG_DIR/xrce.log" 2>&1 &)
+  echo "[launch] MicroXRCEAgent starting (udp4:8888) [$AGENT_BIN]"
 else
   echo "[launch] MicroXRCEAgent already running"
 fi
@@ -61,8 +65,8 @@ fi
 # ---- 4. READY 探测：等 /fmu/out 话题出现 -------------------------------
 echo "[launch] waiting for READY (px4 <-> agent <-> ROS2)..."
 READY=0
-for i in $(seq 1 120); do   # 最长 ~120s
-  if source /opt/ros/humble/setup.bash && ros2 topic list 2>/dev/null | grep -q "^/fmu/out/"; then
+for i in $(seq 1 120); do   # 最长 ~4 分钟（ros2 CLI 每轮约 1-2s）
+  if ros2 topic list 2>/dev/null | grep -q "^/fmu/out/"; then
     READY=1; break
   fi
   sleep 1
