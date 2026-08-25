@@ -13,7 +13,7 @@ import time
 import rclpy
 from rclpy.node import Node
 from rclpy.qos import QoSProfile, ReliabilityPolicy, HistoryPolicy
-from px4_msgs.msg import TrajectorySetpoint, OffboardControlMode, VehicleCommand, VehicleLocalPosition
+from px4_msgs.msg import TrajectorySetpoint, OffboardControlMode, VehicleCommand, VehicleLocalPosition, VehicleStatus
 
 # PX4 uXRCE 发布端为 BEST_EFFORT，订阅端必须匹配（坑清单）
 QOS_BEST_EFFORT = QoSProfile(reliability=ReliabilityPolicy.BEST_EFFORT,
@@ -32,6 +32,9 @@ class SquareOffboard(Node):
         self.cmd_pub = self.create_publisher(VehicleCommand, "/fmu/in/vehicle_command", 10)
         self.pos_sub = self.create_subscription(VehicleLocalPosition, "/fmu/out/vehicle_local_position",
                                                 self.on_pos, QOS_BEST_EFFORT)
+        self.status_sub = self.create_subscription(VehicleStatus, "/fmu/out/vehicle_status",
+                                                   self.on_status, QOS_BEST_EFFORT)
+        self.nav_state = None
 
         # 方框航点（相对起飞点，NED: x 北 y 东）
         s = self.side
@@ -46,6 +49,12 @@ class SquareOffboard(Node):
 
     def on_pos(self, msg):
         self.pos = msg
+
+    def on_status(self, msg):
+        if self.nav_state != msg.nav_state:
+            self.metrics["events"].append({"t": self.t(), "event": f"nav_state={msg.nav_state}"})
+            self.get_logger().info(f"nav_state -> {msg.nav_state} (6=OFFBOARD)")
+            self.nav_state = msg.nav_state
 
     # ---------- 基础发布 ----------
     def publish_mode(self):

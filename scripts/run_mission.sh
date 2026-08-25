@@ -36,8 +36,8 @@ export ROS_DOMAIN_ID=77
 TOPICS="/fmu/out/vehicle_local_position /fmu/out/vehicle_attitude \
 /fmu/out/vehicle_local_position_setpoint /fmu/out/vehicle_status \
 /fmu/out/sensor_combined"
-ros2 bag record -o "$EXP_DIR/bags/flight" -s mcap $TOPICS \
-  >"$EXP_DIR/logs/bag.log" 2>&1 &
+ros2 bag record -o "$EXP_DIR/bags/flight" $TOPICS \
+  >"$EXP_DIR/logs/bag.log" 2>&1 &   # Humble 无 mcap 插件, 用默认 sqlite3
 BAG_PID=$!
 sleep 2
 
