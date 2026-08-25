@@ -63,6 +63,8 @@ cd ~/px4_ros2_ws && source /opt/ros/humble/setup.bash && colcon build
 | Preflight Fail: ekf2 missing data | 刚启动 EKF 未收敛 | 起飞前等 10~15s(square_offboard 已内置) |
 | 手动分离启动 gz server + px4 二进制 | 破坏 lockstep 握手: 世界被暂停, 传感器系统不激活, EKF 永远缺数据 | 必须用 `make px4_sitl gz_x500` 协调启动(sim_launch.sh 已内置) |
 | px4 shell 刷 10GB 日志 | make 的 stdin=EOF 时 px4 shell 疯狂打印提示符 | 启动命令用 `tail -f /dev/null \| make ...` 保活 stdin |
+| rviz2/gz GUI 崩溃 GLXContext unable to create | NVIDIA 驱动/库版本不匹配(unattended-upgrades 后未重启) | sim_launch 已自动回退 Mesa 软渲染; 根治=reboot |
+| `gz sim -r`(server+GUI 同进程) 整体崩 | GUI 的 GLX 崩溃会带走 server | sim_launch 已改为 server 恒 HEADLESS + GUI 客户端分离 |
 | 残留进程导致下次起不来 | 上次异常退出 | `sim_stop.sh`（内部 pkill 全家桶），跑新实验前必查 |
 
 ## 可选组件（按需引入，勿提前安装）
