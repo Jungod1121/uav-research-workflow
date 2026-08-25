@@ -22,9 +22,15 @@ def main():
     combos = list(itertools.product(*(grid[k] for k in keys)))
     total = len(combos) * len(seeds)
     print(f"[sweep:{name}] 组合数={len(combos)} x seeds={len(seeds)} = {total} 次运行")
+    print("[sweep] 前置: 确保仿真栈就绪(幂等)...")
+    pre = subprocess.run(["./scripts/sim_launch.sh", "--headless"], cwd=WF,
+                         capture_output=True, text=True, timeout=480)
+    if "READY" not in pre.stdout:
+        print("SWEEP_ABORTED stack not ready"); return 1
 
     stamp = time.strftime("%Y%m%d-%H%M%S")
     sweep_dir = WF / "experiments" / f"{stamp}-{mission}-sweep-{name}"
+    sweep_dir.mkdir(parents=True, exist_ok=True)
     (sweep_dir / "spec.yaml").write_text(yaml.safe_dump(spec, allow_unicode=True))
     results = []
 
