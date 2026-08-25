@@ -84,6 +84,7 @@ ATTEMPTS=0
 while [ $ATTEMPTS -lt 3 ]; do
   ATTEMPTS=$((ATTEMPTS+1))
   [ $ATTEMPTS -gt 1 ] && { echo "[launch] 第 $ATTEMPTS 次尝试(数据流未通,整栈重启)"; ./scripts/sim_stop.sh >/dev/null 2>&1; sleep 3
+    ("$AGENT_BIN" udp4 -p 8888 >>"$LOG_DIR/xrce.log" 2>&1 &)
     ( cd "$PX4_DIR" && env HEADLESS=1 tail -f /dev/null | make px4_sitl gz_x500 >"$LOG_DIR/px4.log" 2>&1 & ); }
   ros2 daemon stop >/dev/null 2>&1 || true
   READY=0
