@@ -57,6 +57,7 @@ cd ~/px4_ros2_ws && source /opt/ros/humble/setup.bash && colcon build
 | px4_msgs 编译报 CRC/version 错 | msg 版本与固件不匹配 | 两边切同一 release 分支后全量重编 |
 | 二次启动无世界文件/模型找不到 | 模型路径缓存问题 | `export GZ_SIM_RESOURCE_PATH=$HOME/PX4-Autopilot/Tools/simulation/gz/models:...`（见 sim_launch.sh） |
 | DDS 串台收到别人的话题 | ROS_DOMAIN_ID 冲突 | 本工作流固定 `ROS_DOMAIN_ID=77`，sim_launch.sh 已内置 |
+| 订阅端收不到消息, 日志报 incompatible QoS (RELIABILITY) | rclpy 默认 RELIABLE, PX4 uXRCE 发布端是 BEST_EFFORT | 订阅用 BEST_EFFORT QoSProfile（square_offboard.py 已内置） |
 | 残留进程导致下次起不来 | 上次异常退出 | `sim_stop.sh`（内部 pkill 全家桶），跑新实验前必查 |
 
 ## 可选组件（按需引入，勿提前安装）

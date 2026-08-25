@@ -12,7 +12,12 @@ import time
 
 import rclpy
 from rclpy.node import Node
+from rclpy.qos import QoSProfile, ReliabilityPolicy, HistoryPolicy
 from px4_msgs.msg import TrajectorySetpoint, OffboardControlMode, VehicleCommand, VehicleLocalPosition
+
+# PX4 uXRCE 发布端为 BEST_EFFORT，订阅端必须匹配（坑清单）
+QOS_BEST_EFFORT = QoSProfile(reliability=ReliabilityPolicy.BEST_EFFORT,
+                             history=HistoryPolicy.KEEP_LAST, depth=10)
 
 
 class SquareOffboard(Node):
@@ -26,7 +31,7 @@ class SquareOffboard(Node):
         self.sp_pub = self.create_publisher(TrajectorySetpoint, "/fmu/in/trajectory_setpoint", 10)
         self.cmd_pub = self.create_publisher(VehicleCommand, "/fmu/in/vehicle_command", 10)
         self.pos_sub = self.create_subscription(VehicleLocalPosition, "/fmu/out/vehicle_local_position",
-                                                self.on_pos, 10)
+                                                self.on_pos, QOS_BEST_EFFORT)
 
         # 方框航点（相对起飞点，NED: x 北 y 东）
         s = self.side

@@ -26,8 +26,10 @@ for kv in "$@"; do
 done
 echo "[mission] config: side=$SIDE height=$HEIGHT speed=$SPEED wp_tol=$WP_TOL view_every=$VIEW_EVERY"
 
+set +u   # ROS setup.bash 不兼容 nounset
 source /opt/ros/humble/setup.bash
 [ -f "$HOME/px4_ros2_ws/install/setup.bash" ] && source "$HOME/px4_ros2_ws/install/setup.bash"
+set -u
 export ROS_DOMAIN_ID=77
 
 # ---- 1. 启动 rosbag 录制（关键 fmu 话题 + tf）----
