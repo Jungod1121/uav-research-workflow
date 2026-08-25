@@ -59,6 +59,10 @@ cd ~/px4_ros2_ws && source /opt/ros/humble/setup.bash && colcon build
 | DDS 串台收到别人的话题 | ROS_DOMAIN_ID 冲突 | 本工作流固定 `ROS_DOMAIN_ID=77`，sim_launch.sh 已内置 |
 | 订阅端收不到消息, 日志报 incompatible QoS (RELIABILITY) | rclpy 默认 RELIABLE, PX4 uXRCE 发布端是 BEST_EFFORT | 订阅用 BEST_EFFORT QoSProfile（square_offboard.py 已内置） |
 | 话题名带版本后缀(如 vehicle_status_v1) | PX4 v1.16+ 启用消息版本化命名 | 用 `ros2 topic list` 确认实际名; 类型不变 |
+| Preflight Fail: No connection to the ground control station | SITL 机架默认 NAV_DLL_ACT=2 要求 GCS 在线 | 4001_gz_x500 已改为 NAV_DLL_ACT=0(无QGC环境); 重装 PX4 后需重打 |
+| Preflight Fail: ekf2 missing data | 刚启动 EKF 未收敛 | 起飞前等 10~15s(square_offboard 已内置) |
+| 手动分离启动 gz server + px4 二进制 | 破坏 lockstep 握手: 世界被暂停, 传感器系统不激活, EKF 永远缺数据 | 必须用 `make px4_sitl gz_x500` 协调启动(sim_launch.sh 已内置) |
+| px4 shell 刷 10GB 日志 | make 的 stdin=EOF 时 px4 shell 疯狂打印提示符 | 启动命令用 `tail -f /dev/null \| make ...` 保活 stdin |
 | 残留进程导致下次起不来 | 上次异常退出 | `sim_stop.sh`（内部 pkill 全家桶），跑新实验前必查 |
 
 ## 可选组件（按需引入，勿提前安装）

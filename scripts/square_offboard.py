@@ -127,6 +127,7 @@ class SquareOffboard(Node):
     def run(self):
         if not self.wait_pos_valid():
             print("MISSION_FAILED no_local_position"); return 1
+        time.sleep(12)   # 等 EKF 收敛, 避免 Preflight: ekf2 missing data
 
         x0, y0 = self.pos.x, self.pos.y
         self.metrics["events"].append({"t": self.t(), "event": "takeoff_start"})
