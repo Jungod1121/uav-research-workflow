@@ -50,7 +50,8 @@ PX4_DIR="$HOME/PX4-Autopilot"
 
 LAUNCH_ENV=()
 if [ "$HEADLESS" = "1" ]; then LAUNCH_ENV+=(HEADLESS=1); fi
-( cd "$PX4_DIR" && env "${LAUNCH_ENV[@]}" make px4_sitl gz_x500 >"$LOG_DIR/px4.log" 2>&1 & )
+# stdin 必须保持打开: EOF 会让 px4 shell 疯狂刷提示符(10GB级日志), 用 tail -f 喂住
+( cd "$PX4_DIR" && env "${LAUNCH_ENV[@]}" tail -f /dev/null | make px4_sitl gz_x500 >"$LOG_DIR/px4.log" 2>&1 & )
 
 # ---- 3. RViz（可选）----------------------------------------------------
 if [ "$RVIZ" = "1" ]; then
