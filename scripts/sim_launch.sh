@@ -81,7 +81,8 @@ ros2 daemon stop >/dev/null 2>&1 || true
 echo "[launch] waiting for READY (px4 <-> agent <-> ROS2)..."
 READY=0
 for i in $(seq 1 60); do   # 最长 ~5 分钟
-  if timeout 15 ros2 topic list 2>/dev/null | grep -q "^/fmu/out/"; then
+  # 探测数据流而非话题存在(uxrce 会预创建全部 writer, 话题在无数据时也可发现)
+  if timeout 12 ros2 topic hz /fmu/out/sensor_combined --window 5 2>/dev/null | grep -q "min"; then
     READY=1; break
   fi
   sleep 1
