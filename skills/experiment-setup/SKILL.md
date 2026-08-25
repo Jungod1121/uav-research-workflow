@@ -16,7 +16,7 @@ description: UAV 仿真实验环境的安装、版本钉死与排障。涵盖 RO
 | ROS 2 | Humble（/opt/ros/humble） | apt |
 | Gazebo | Harmonic（gz-sim8） | osrfoundation apt 源 |
 | PX4-Autopilot | v1.16 release 分支 | ~/PX4-Autopilot 源码 |
-| px4_msgs / px4_ros_com | 与 PX4 分支同名分支 | colcon ws 源码编译 |
+| px4_msgs / px4_ros_com | release/1.16 分支（tag v1.16.0 对应） | colcon ws 源码编译 |
 | Micro XRCE-DDS Agent | v2.4.3+ | 源码或 snap |
 | ros_gz | humble↔harmonic 组合（按需，图像话题桥接用） | 源码 |
 
@@ -43,7 +43,7 @@ cd ~/Micro-XRCE-DDS-Agent && mkdir build && cd build && cmake .. && make -j$(npr
 # 4. ROS 侧消息与接口
 mkdir -p ~/px4_ros2_ws/src && cd ~/px4_ros2_ws/src
 git clone https://github.com/PX4/px4_msgs.git && git clone https://github.com/PX4/px4_ros_com.git
-# ⚠️ 两个仓库都要 checkout 与 PX4 相同的 release/v1.16 分支
+# ⚠️ 两个仓库都要 checkout release/1.16 分支（对应固件 tag v1.16.0）
 cd ~/px4_ros2_ws && source /opt/ros/humble/setup.bash && colcon build
 ```
 

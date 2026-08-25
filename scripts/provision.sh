@@ -55,7 +55,7 @@ if [ ! -d "$HOME/PX4-Autopilot" ]; then
   git clone https://github.com/PX4/PX4-Autopilot.git ~/PX4-Autopilot --recursive
 fi
 cd ~/PX4-Autopilot
-git checkout v1.16 2>/dev/null || git checkout release/v1.16 2>/dev/null || echo "  WARN: v1.16 分支不存在，使用当前默认分支"
+git checkout -q v1.16.0 2>/dev/null || echo "  WARN: v1.16.0 不存在，用默认分支"
 bash ./Tools/setup/ubuntu.sh --no-nuttx || true
 if [ ! -f build/px4_sitl_default/bin/px4 ]; then
   make px4_sitl
@@ -74,8 +74,11 @@ if [ ! -f "$HOME/px4_ros2_ws/install/setup.bash" ]; then
   mkdir -p ~/px4_ros2_ws/src && cd ~/px4_ros2_ws/src
   [ -d px4_msgs ]     || git clone https://github.com/PX4/px4_msgs.git
   [ -d px4_ros_com ]  || git clone https://github.com/PX4/px4_ros_com.git
-  BRANCH="release/v1.16"
-  for r in px4_msgs px4_ros_com; do git -C $r checkout $BRANCH 2>/dev/null || true; done
+  BRANCH="release/1.16"
+  for r in px4_msgs px4_ros_com; do
+    git -C "$r" checkout -q "$BRANCH" 2>/dev/null || \
+      { git -C "$r" fetch -q origin "$BRANCH"; git -C "$r" checkout -q -B "$BRANCH" "origin/$BRANCH"; }
+  done
   cd ~/px4_ros2_ws && unset GZ_SIM_RESOURCE_PATH SDF_PATH LD_LIBRARY_PATH || true
   colcon build --symlink-install
 fi
