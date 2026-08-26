@@ -24,8 +24,14 @@ RUN git clone https://github.com/eProsima/Micro-XRCE-DDS-Agent.git /root/Micro-X
  && cmake -S /root/Micro-XRCE-DDS-Agent -B /root/Micro-XRCE-DDS-Agent/build -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF \
  && make -C /root/Micro-XRCE-DDS-Agent/build -j$(nproc)
 
+# px4_msgs 工作区(任务节点与验证依赖)
+RUN apt-get update && apt-get install -y --no-install-recommends python3-colcon-common-extensions \
+ && mkdir -p /root/px4_ros2_ws/src \
+ && git clone --branch release/1.16 https://github.com/PX4/px4_msgs.git /root/px4_ros2_ws/src/px4_msgs \
+ && bash -c "source /opt/ros/humble/setup.bash && cd /root/px4_ros2_ws && colcon build --symlink-install"
+
 # 工作流编排与任务
 COPY launch /root/work/launch
 COPY scripts /root/work/scripts
 WORKDIR /root/work
-CMD ["bash", "-c", "source /opt/ros/humble/setup.bash && export ROS_DOMAIN_ID=77 && ros2 launch launch/sim_stack.launch.py"]
+CMD ["bash", "-c", "source /opt/ros/humble/setup.bash && source /root/px4_ros2_ws/install/setup.bash && export ROS_DOMAIN_ID=77 && ros2 launch launch/sim_stack.launch.py"]
