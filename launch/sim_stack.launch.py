@@ -27,6 +27,7 @@ PX4_ENV = {
     "PX4_GZ_NO_FOLLOW": "1",
     "ROS_DOMAIN_ID": "77",
     "GZ_VERSION": "harmonic",
+    "GZ_IP": "127.0.0.1",  # gz-transport 发现统一回环: 组播在本机 rt_offload_failed 不可靠
 }
 
 
@@ -46,6 +47,17 @@ def generate_launch_description():
     )
 
     px4_delayed = TimerAction(period=2.0, actions=[px4])
+
+    # 实例 1(第二架): 官方多机约定 -> -i 1 + MAV_SYS_ID=2, 自动命名空间 /px4_1/fmu/
+    # UXRCE_DDS_KEY 自动 = instance+1 = 2; PX4_GZ_MODEL_POSE 错开出生点防碰撞
+    px4_env_1 = dict(PX4_ENV, MAV_SYS_ID="2", PX4_GZ_MODEL_POSE="0,2")
+    px4_1 = ExecuteProcess(
+        cmd=[str(PX4_DIR / "build" / "px4_sitl_default" / "bin" / "px4"), "-i", "1"],
+        cwd=str(PX4_DIR),
+        additional_env=px4_env_1,
+        output="log",
+    )
+    px4_1_delayed = TimerAction(period=8.0, actions=[px4_1])
 
     actions = [agent, px4_delayed]
     if INSTANCES >= 2:
