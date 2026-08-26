@@ -17,7 +17,7 @@ RUN git clone --branch v1.16.0 --depth 1 https://github.com/PX4/PX4-Autopilot.gi
  && cp /root/patches/px4-rc.params /root/PX4-Autopilot/ROMFS/px4fmu_common/init.d-posix/ \
  && sed -i 's/\tpx4-rc.simulator/\tpx4-rc.params\n\tpx4-rc.simulator/' /root/PX4-Autopilot/ROMFS/px4fmu_common/init.d-posix/CMakeLists.txt \
  && cd /root/PX4-Autopilot && ./Tools/setup/ubuntu.sh --no-nuttx || true \
-  && make px4_sitl && make px4_sitl nice -n 10 make -j8 px4_sitl
+ && nice -n 10 make -j8 px4_sitl
 
 # uXRCE-DDS Agent(静态链接)
 RUN git clone https://github.com/eProsima/Micro-XRCE-DDS-Agent.git /root/Micro-XRCE-DDS-Agent \
