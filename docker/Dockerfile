@@ -15,6 +15,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 COPY docker/patches /root/patches
 COPY docker/px4-src.tar.gz /tmp/px4-src.tar.gz
 RUN mkdir /root/PX4-Autopilot && tar xzf /tmp/px4-src.tar.gz -C /root/PX4-Autopilot && rm /tmp/px4-src.tar.gz \
+ && find /root/PX4-Autopilot -name ".git" -type f -delete \
  && cd /root/PX4-Autopilot && git init -q && git config --global --add safe.directory /root/PX4-Autopilot && git add -A \
  && git -c user.email=workflow@local -c user.name=workflow commit -qm "v1.16.0 offline" && git tag -f v1.16.0 \
  && cp /root/patches/px4-rc.params ROMFS/px4fmu_common/init.d-posix/ \
