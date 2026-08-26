@@ -26,7 +26,7 @@ RUN git clone https://github.com/eProsima/Micro-XRCE-DDS-Agent.git /root/Micro-X
 
 # px4_msgs 工作区: 直接复用宿主机预编译产物(同 22.04+humble 二进制兼容;
 # 容器内 colcon 编译 px4_msgs 会无限挂起, 原因未明, 见 WORKFLOW.md 已知问题)
-COPY px4_ros2_ws /root/px4_ros2_ws
+COPY docker/px4_ros2_ws /root/px4_ros2_ws
 
 # 工作流编排与任务
 COPY launch /root/work/launch
