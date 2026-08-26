@@ -22,6 +22,7 @@ def main():
     tol = float(kv.get("wp_tol", 0.35))
     hold_s = float(kv.get("hold_s", 10))
     ns = kv.get("ns", "")
+    sys_id = kv.get("sys_id", "1")
 
     rclpy.init()
     bag = subprocess.Popen(
@@ -30,7 +31,7 @@ def main():
          "/fmu/out/vehicle_odometry", "/fmu/out/vehicle_status_v1",
          "/fmu/out/vehicle_control_mode", "/fmu/out/sensor_combined"],
         stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-    m = OffboardMission(f"mission_{mission}", namespace=ns)
+    m = OffboardMission(f"mission_{mission}", namespace=ns, mav_sys_id=sys_id)
     m.height = height
 
     if not m.preflight():

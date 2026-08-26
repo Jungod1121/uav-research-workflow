@@ -27,7 +27,7 @@ ACK_TIMEOUT_S = 12         # ARM/模式切换 ACK 重试窗口
 class OffboardMission(Node):
     """单机 offboard 状态机。namespace="" -> /fmu/; namespace="px4_1" -> /px4_1/fmu/"""
 
-    def __init__(self, name="mission", namespace=""):
+    def __init__(self, name="mission", namespace="", mav_sys_id=1):
         super().__init__(name)
         ns = f"/{namespace}" if namespace else ""
         self.mode_pub = self.create_publisher(OffboardControlMode, f"{ns}/fmu/in/offboard_control_mode", 10)
@@ -41,7 +41,8 @@ class OffboardMission(Node):
         self.pos = None
         self.nav_state = None
         self.create_subscription(VehicleCommandAck, f"{ns}/fmu/out/vehicle_command_ack", self._on_ack, QOS)
-        self.metrics = {"events": [], "namespace": namespace}
+        self.mav_sys_id = int(mav_sys_id)   # 多机: 必须与目标机的 MAV_SYS_ID 一致, 否则命令被忽略
+        self.metrics = {"events": [], "namespace": namespace, "mav_sys_id": self.mav_sys_id}
         self.t0 = time.time()
 
     # ---------- 基础 ----------
@@ -84,7 +85,7 @@ class OffboardMission(Node):
             self.heartbeat(sp)  # 心跳不能断: offboard 丢失即 failsafe
             if time.time() - last_send > 2.0:
                 v = VehicleCommand(); v.command = command; v.param1 = float(p1); v.param2 = float(p2)
-                v.target_system = 1; v.target_component = 1
+                v.target_system = self.mav_sys_id; v.target_component = 1
                 v.timestamp = int(self.get_clock().now().nanoseconds / 1000)
                 self.cmd_pub.publish(v)
                 last_send = time.time()
