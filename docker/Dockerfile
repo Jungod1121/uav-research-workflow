@@ -15,9 +15,17 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 COPY docker/patches /root/patches
 RUN git clone --branch v1.16.0 --depth 1 https://github.com/PX4/PX4-Autopilot.git /root/PX4-Autopilot \
  && cp /root/patches/px4-rc.params /root/PX4-Autopilot/ROMFS/px4fmu_common/init.d-posix/ \
- && sed -i 's/\tpx4-rc.simulator/\tpx4-rc.params\n\tpx4-rc.simulator/' /root/PX4-Autopilot/ROMFS/px4fmu_common/init.d-posix/CMakeLists.txt \
- && cd /root/PX4-Autopilot && ./Tools/setup/ubuntu.sh --no-nuttx || true \
- && nice -n 10 make -j8 px4_sitl
+ && sed -i 's/\tpx4-rc.simulator/\tpx4-rc.params\n\tpx4-rc.simulator/' /root/PX4-Autopilot/ROMFS/px4fmu_common/init.d-posix/CMakeLists.txt
+
+# 依赖(独立层: 失败重跑不回退到 clone)
+RUN cd /root/PX4-Autopilot && ./Tools/setup/ubuntu.sh --no-nuttx || true
+
+# 子模块(网络瞬断自动重试, 三轮兜底)
+RUN cd /root/PX4-Autopilot \
+ && git submodule update --init --recursive || git submodule update --init --recursive || git submodule update --init --recursive
+
+# 编译(限 8 并发 + 降优先级, 保护桌面)
+RUN cd /root/PX4-Autopilot && nice -n 10 make -j8 px4_sitl
 
 # uXRCE-DDS Agent(静态链接)
 RUN git clone https://github.com/eProsima/Micro-XRCE-DDS-Agent.git /root/Micro-XRCE-DDS-Agent \
