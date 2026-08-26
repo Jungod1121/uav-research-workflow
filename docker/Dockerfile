@@ -24,9 +24,9 @@ RUN mkdir /root/PX4-Autopilot && tar xzf /tmp/px4-src.tar.gz -C /root/PX4-Autopi
  && sed -i 's/\tpx4-rc.simulator/\tpx4-rc.params\n\tpx4-rc.simulator/' ROMFS/px4fmu_common/init.d-posix/CMakeLists.txt
 
 # 子模块 .git 指针文件悬空 -> 转成真实 mini 仓库(版本查询与 ninja 依赖都要求有效)
-RUN cd /root/PX4-Autopilot && find . -name ".git" -type f | while read g; do \
+RUN git config --global --add safe.directory '*' \
+ && cd /root/PX4-Autopilot && find . -name ".git" -type f | while read g; do \
       d=$(dirname "$g"); rm -f "$g"; \
-      git config --global --add safe.directory "$d" || true; \
       (cd "$d" && git init -q && git add -A && git -c user.email=w@l -c user.name=w commit -qm sub) || true; done; true
 
 # 依赖(独立层: 失败重跑不回退到 clone)
