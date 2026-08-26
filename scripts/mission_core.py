@@ -75,12 +75,13 @@ class OffboardMission(Node):
             s.timestamp = m.timestamp
             self.sp_pub.publish(s)
 
-    def _cmd_with_ack(self, command, p1=0.0, p2=0.0, expect_result=0):
-        """发命令并等待 ACK; TEMP_REJECTED(1) 重试, 超时放弃。返回最终 result。"""
+    def _cmd_with_ack(self, command, p1=0.0, p2=0.0, expect_result=0, sp=None):
+        """发命令并等待 ACK; 重试期间持续发心跳(否则 COM_OF_LOSS_T 触发 failsafe)。"""
         self.acked_cmd = None
         deadline = time.time() + ACK_TIMEOUT_S
         last_send = 0
         while time.time() < deadline:
+            self.heartbeat(sp)  # 心跳不能断: offboard 丢失即 failsafe
             if time.time() - last_send > 2.0:
                 v = VehicleCommand(); v.command = command; v.param1 = float(p1); v.param2 = float(p2)
                 v.target_system = 1; v.target_component = 1
@@ -114,9 +115,9 @@ class OffboardMission(Node):
         end = time.time() + PRESTREAM_S
         while time.time() < end:
             self.heartbeat(home_xy + (height,)); rclpy.spin_once(self, timeout_sec=0.05)
-        r1 = self._cmd_with_ack(VehicleCommand.VEHICLE_CMD_DO_SET_MODE, 1, 6)
+        r1 = self._cmd_with_ack(VehicleCommand.VEHICLE_CMD_DO_SET_MODE, 1, 6, sp=home_xy + (height,))
         self.metrics["events"].append({"t": self.t(), "e": f"offboard_ack={r1}"})
-        r2 = self._cmd_with_ack(VehicleCommand.VEHICLE_CMD_COMPONENT_ARM_DISARM, 1)
+        r2 = self._cmd_with_ack(VehicleCommand.VEHICLE_CMD_COMPONENT_ARM_DISARM, 1, sp=home_xy + (height,))
         self.metrics["events"].append({"t": self.t(), "e": f"arm_ack={r2}"})
         return r1 == 0 and r2 == 0
 
