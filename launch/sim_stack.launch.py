@@ -18,6 +18,7 @@ PX4_DIR = Path.home() / "PX4-Autopilot"
 AGENT_BIN = Path.home() / "Micro-XRCE-DDS-Agent" / "build" / "MicroXRCEAgent"
 
 HEADLESS = os.environ.get("STACK_HEADLESS", "1")  # 1=仅 server; 0=rcS 另起 GUI(需 GL 健康)
+INSTANCES = int(os.environ.get("STACK_INSTANCES", "1"))  # 1=单机; 2=双机(官方 -i/namespace 约定)
 
 PX4_ENV = {
     "PX4_SIM_MODEL": "gz_x500",
@@ -46,4 +47,7 @@ def generate_launch_description():
 
     px4_delayed = TimerAction(period=2.0, actions=[px4])
 
-    return LaunchDescription([agent, px4_delayed])
+    actions = [agent, px4_delayed]
+    if INSTANCES >= 2:
+        actions.append(px4_1_delayed)
+    return LaunchDescription(actions)
