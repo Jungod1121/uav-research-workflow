@@ -17,10 +17,12 @@ from launch.actions import ExecuteProcess, TimerAction
 PX4_DIR = Path.home() / "PX4-Autopilot"
 AGENT_BIN = Path.home() / "Micro-XRCE-DDS-Agent" / "build" / "MicroXRCEAgent"
 
+HEADLESS = os.environ.get("STACK_HEADLESS", "1")  # 1=仅 server; 0=rcS 另起 GUI(需 GL 健康)
+
 PX4_ENV = {
     "PX4_SIM_MODEL": "gz_x500",
     "PX4_SYS_AUTOSTART": "4001",
-    "HEADLESS": "1",            # rcS 只起 server, GUI 由上层按需另起
+    "HEADLESS": HEADLESS,
     "PX4_GZ_NO_FOLLOW": "1",
     "ROS_DOMAIN_ID": "77",
     "GZ_VERSION": "harmonic",
