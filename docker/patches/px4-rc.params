@@ -1,0 +1,4 @@
+# px4-rc.params — uav-workflow 无头 offboard 参数(官方用户参数钩子)
+param set-default COM_RC_IN_MODE 4     # 禁用手动输入(无遥控器)
+param set-default COM_RCL_EXCEPT 4     # offboard 模式豁免 RC 丢失 failsafe
+param set-default NAV_DLL_ACT 0        # 数据链路丢失不动作(无 QGC 环境)
