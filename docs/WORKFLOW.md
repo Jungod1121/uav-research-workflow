@@ -122,3 +122,11 @@ mkdir -p ~/ai-skills && git clone https://github.com/Yuan1z0825/nature-skills.gi
 - PX4 SITL 自己管理 gz server 生命周期（rcS 内建），上层不再抢
 - 任务层最小化：mission_takeoff_hold.py（起飞+位置保持）先行，方框/多机在其上叠加
 - 待做：Docker 化（别人一条命令部署）——需宿主装 docker
+
+### Docker 层实操记录（2026-08-26）
+- 基镜像拉取: Docker Hub 直连不稳, 用 `docker pull docker.m.daocloud.io/library/ros:humble` 后 `docker tag` 为 ros:humble
+- 守护进程代理: /etc/systemd/system/docker.service.d/proxy.conf 指向 Clash 混合端口(本机 7897), daemon-reload+restart
+- 构建: `docker build --network host --build-arg HTTP_PROXY=http://127.0.0.1:7897 --build-arg HTTPS_PROXY=... -t uav-sim:humble -f docker/Dockerfile .`
+  (--network host 让容器内 apt 走宿主机代理; px4-dev-base 镜像无 gz target 勿用 #26153)
+- 源码归档: docker/px4-src = `git archive v1.16.0` + 两处 workflow 改动(px4-rc.params + CMakeLists 注册), 更新参数后需重新归档
+- 验收: `docker exec uav-sim bash -c "..."` 容器内自包含验证(容器与宿主的 FastDDS SHM 不互通, 任务在容器内跑)
