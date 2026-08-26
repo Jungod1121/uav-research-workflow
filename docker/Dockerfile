@@ -24,11 +24,9 @@ RUN git clone https://github.com/eProsima/Micro-XRCE-DDS-Agent.git /root/Micro-X
  && cmake -S /root/Micro-XRCE-DDS-Agent -B /root/Micro-XRCE-DDS-Agent/build -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF \
  && make -C /root/Micro-XRCE-DDS-Agent/build -j$(nproc)
 
-# px4_msgs 工作区(任务节点与验证依赖)
-RUN apt-get update && apt-get install -y --no-install-recommends python3-colcon-common-extensions \
- && mkdir -p /root/px4_ros2_ws/src \
- && git clone --branch release/1.16 https://github.com/PX4/px4_msgs.git /root/px4_ros2_ws/src/px4_msgs \
- && bash -c "source /opt/ros/humble/setup.bash && cd /root/px4_ros2_ws && colcon build --symlink-install"
+# px4_msgs 工作区: 直接复用宿主机预编译产物(同 22.04+humble 二进制兼容;
+# 容器内 colcon 编译 px4_msgs 会无限挂起, 原因未明, 见 WORKFLOW.md 已知问题)
+COPY px4_ros2_ws /root/px4_ros2_ws
 
 # 工作流编排与任务
 COPY launch /root/work/launch
