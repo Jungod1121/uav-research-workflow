@@ -24,8 +24,9 @@ RUN mkdir /root/PX4-Autopilot && tar xzf /tmp/px4-src.tar.gz -C /root/PX4-Autopi
  && sed -i 's/\tpx4-rc.simulator/\tpx4-rc.params\n\tpx4-rc.simulator/' ROMFS/px4fmu_common/init.d-posix/CMakeLists.txt
 
 # 子模块 .git 指针文件悬空 -> 转成真实 mini 仓库(版本查询与 ninja 依赖都要求有效)
+# git 强制 HTTP/1.1: 代理下 HTTP2 framing 层会断流
 RUN git config --global --add safe.directory '*' \
- && git config --global http.version HTTP/1.1  # 代理下 HTTP2 framing 层会断流, 强制 1.1
+ && git config --global http.version HTTP/1.1 \
  && cd /root/PX4-Autopilot && find . -name ".git" -type f | while read g; do \
       d=$(dirname "$g"); rm -f "$g"; \
       (cd "$d" && git init -q && git add -A && git -c user.email=w@l -c user.name=w commit -qm sub && git tag -f nuttx-4.3.1 && git tag -f v1.16.0) || true; done; true
