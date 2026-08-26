@@ -53,7 +53,12 @@ def main():
         m.metrics["events"].append({"t": m.t(), "e": "hold_done"})
     elif mission == "square":
         s = side
-        wps = [(s/2, 0), (s, 0), (s, s/2), (s, s), (s/2, s), (0, s), (0, s/2), (0, 0)]
+        corners = [(0, 0), (s, 0), (s, s), (0, s), (0, 0)]
+        wps = []
+        for (x1, y1), (x2, y2) in zip(corners, corners[1:]):
+            for k in range(1, 4):   # 每边 3 个内插点(四分点密度)
+                wps.append((x1 + (x2-x1)*k/4, y1 + (y2-y1)*k/4))
+        wps.append((0, 0))
         ok = m.arm_and_engage(home, height)
         if not ok:
             m.land_and_finish(out, height)
