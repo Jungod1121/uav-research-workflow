@@ -13,9 +13,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 # PX4 v1.16.0: 容器内 git clone(需 .git 元数据) + 叠加 workflow 补丁
 COPY docker/patches /root/patches
-RUN git clone --branch v1.16.0 --depth 1 https://github.com/PX4/PX4-Autopilot.git /root/PX4-Autopilot \
- && cp /root/patches/px4-rc.params /root/PX4-Autopilot/ROMFS/px4fmu_common/init.d-posix/ \
- && sed -i 's/\tpx4-rc.simulator/\tpx4-rc.params\n\tpx4-rc.simulator/' /root/PX4-Autopilot/ROMFS/px4fmu_common/init.d-posix/CMakeLists.txt
+COPY docker/px4-src.tar.gz /tmp/px4-src.tar.gz
+RUN mkdir /root/PX4-Autopilot && tar xzf /tmp/px4-src.tar.gz -C /root/PX4-Autopilot && rm /tmp/px4-src.tar.gz \
+ && cd /root/PX4-Autopilot && git init -q && git add -A \
+ && git -c user.email=workflow@local -c user.name=workflow commit -qm "v1.16.0 offline" && git tag -f v1.16.0 \
+ && cp /root/patches/px4-rc.params ROMFS/px4fmu_common/init.d-posix/ \
+ && sed -i 's/\tpx4-rc.simulator/\tpx4-rc.params\n\tpx4-rc.simulator/' ROMFS/px4fmu_common/init.d-posix/CMakeLists.txt
 
 # 依赖(独立层: 失败重跑不回退到 clone)
 RUN cd /root/PX4-Autopilot && ./Tools/setup/ubuntu.sh --no-nuttx || true
