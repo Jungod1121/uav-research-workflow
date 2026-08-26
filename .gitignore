@@ -2,3 +2,4 @@ experiments/
 state/
 *.pyc
 __pycache__/
+docker/px4-src/
