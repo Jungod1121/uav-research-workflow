@@ -117,16 +117,26 @@ mkdir -p ~/ai-skills && git clone https://github.com/Yuan1z0825/nature-skills.gi
 - 提醒 ≠ 结论：gap-watch 只报变化，判断在人
 - AI 不代替选题决策与方法设想（proposal 第 4 章留白给作者）
 
-## v2 架构（2026-08-26，用户方向：先单机、可复现）
+## v2 架构（2026-08-26，已验收）
+
 - 编排从 bash 手搓改为 `ros2 launch launch/sim_stack.launch.py`（声明式、进程树受管、干净关停）
 - PX4 SITL 自己管理 gz server 生命周期（rcS 内建），上层不再抢
-- 任务层最小化：mission_takeoff_hold.py（起飞+位置保持）先行，方框/多机在其上叠加
-- 待做：Docker 化（别人一条命令部署）——需宿主装 docker
+- 任务层：`scripts/mission_core.py` 状态机（IDLE→PREFLIGHT→ARM→TAKEOFF→EXECUTE→HOLD→LAND，官方契约：20Hz 心跳、1.5s 预流、ARM ACK 重试确认制）+ `run_mission_v2.py` 消费者 + 双机 `mission_follower.py`
+- 参数三件套经 `px4-rc.params`（COM_RC_IN_MODE=4, RCL_EXCEPT=4, NAV_DLL_ACT=0）——持久化优于改机架文件
+- 验证：HOLD 漂移 0.068m ≤0.1m、方框四分点 0.104m ≤0.15m（13/13 航点）、双机编队 Leader 13/13 + Follower 均值 0.55m
 
-### Docker 层实操记录（2026-08-26）
+### Docker 可复现层（2026-08-26，已验收：镜像 ab4a5b630c00，容器内 100Hz）
+
 - 基镜像拉取: Docker Hub 直连不稳, 用 `docker pull docker.m.daocloud.io/library/ros:humble` 后 `docker tag` 为 ros:humble
-- 守护进程代理: /etc/systemd/system/docker.service.d/proxy.conf 指向 Clash 混合端口(本机 7897), daemon-reload+restart
+- 守护进程代理: `/etc/systemd/system/docker.service.d/proxy.conf` 指向 Clash 混合端口(本机 7897), `daemon-reload+restart`
 - 构建: `docker build --network host --build-arg HTTP_PROXY=http://127.0.0.1:7897 --build-arg HTTPS_PROXY=... -t uav-sim:humble -f docker/Dockerfile .`
   (--network host 让容器内 apt 走宿主机代理; px4-dev-base 镜像无 gz target 勿用 #26153)
-- 源码归档: docker/px4-src = `git archive v1.16.0` + 两处 workflow 改动(px4-rc.params + CMakeLists 注册), 更新参数后需重新归档
-- 验收: `docker exec uav-sim bash -c "..."` 容器内自包含验证(容器与宿主的 FastDDS SHM 不互通, 任务在容器内跑)
+- 源码归档: `docker/px4-src.tar.gz`（`--exclude build/.git`）+ `docker/px4-gitfiles.tar.gz`（47 个 submodule .git 文件）+ `docker/px4_ros2_ws`（宿主机预编译产物 `--copy-links` 解引用）；Dockerfile 内合成 git 元数据 + mini 仓库 + `safe.directory *` + `http.version HTTP/1.1` 等 8 项构建坑已固化
+- 验收: `sg docker -c "docker run -d --name uav-sim --network host --shm-size 2gb -e ROS_DOMAIN_ID=77 -e STACK_INSTANCES=2 uav-sim:humble"` → 容器内 `ros2 topic hz /fmu/out/sensor_combined` ~100Hz（单机与双机 /px4_1 均验证）
+
+### WebUI 监控台（2026-08-26，`http://localhost:8765`）
+
+- 后端 `webui/backend.py`（FastAPI）：聚合 `systemctl is-active`、日志 `tail`、 `sg docker images/ps`、`ros2 topic hz`、`experiments` 血缘扫描、`psutil` 系统指标；`CORS` 全开
+- 前端 `webui/static/index.html`：Apple 风格（Tailwind CDN、SF Pro、24px 圆角、glass 毛玻璃、bento 四卡片、深色终端）
+- 四卡片：Docker Build（进度环+徽章+终端）/ Sim Stack（PX4/Gazebo/Agent + hz 药丸 + Start/Stop/Restart）/ Experiments（最近 30 条血缘表）/ System（CPU/Mem/Disk + 镜像/容器透出）；底部 Logs 四 Tab（docker_build/sim/ros/px4，1.5s 轮询，自动刷新/跟随）
+- 服务 `~/.config/systemd/user/uav-monitor.service`（`8765`，自启动，`Restart=always`）
