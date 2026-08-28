@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>UAV Workflow — Monitor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config={theme:{extend:{fontFamily:{sans:['-apple-system','SF Pro Display','Inter','Helvetica Neue','Arial','sans-serif']},colors:{apple:{blue:'#007AFF',gray:'#8E8E93',bg:'#F5F5F7'}}}}}
+</script>
+<style>
+*{ -webkit-font-smoothing:antialiased }
+.glass{backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%)}
+.card{border:1px solid rgba(0,0,0,0.06); box-shadow: 0 4px 24px rgba(0,0,0,0.06), 0 1px 3px rgba(0,0,0,0.04)}
+.bento{border-radius:24px}
+.mono{font-family: ui-monospace, SFMono-Regular, Menlo, monospace}
+.scrollbar-thin::-webkit-scrollbar{width:6px;height:6px}
+.scrollbar-thin::-webkit-scrollbar-thumb{background:rgba(0,0,0,0.12);border-radius:999px}
+.dot{width:8px;height:8px;border-radius:999px;display:inline-block}
+.pulse{animation:pulse 1.8s infinite}
+@keyframes pulse{0%,100%{opacity:1} 50%{opacity:0.45}}
+</style>
+</head>
+<body class="bg-[#F5F5F7] text-zinc-900 selection:bg-[#007AFF]/20">
+<!-- Header -->
+<header class="sticky top-0 z-40 glass bg-white/70 border-b border-black/5">
+  <div class="max-w-[1280px] mx-auto px-6 h-[64px] flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <div class="w-9 h-9 rounded-xl bg-black text-white grid place-items-center text-[16px] font-semibold">◈</div>
+      <div>
+        <div class="text-[15px] font-semibold tracking-tight leading-none">UAV Research Workflow</div>
+        <div class="text-[12px] text-zinc-500 -mt-0.5">Monitor · 半自动科研助手</div>
+      </div>
+      <span class="ml-3 hidden md:inline-flex items-center gap-1.5 text-[11px] font-medium px-2.5 py-1 rounded-full bg-zinc-900 text-white">v2.1 · mission_core</span>
+    </div>
+    <div class="flex items-center gap-2">
+      <span id="pill-build" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white border border-black/5 text-[12px] font-medium"><span class="dot bg-zinc-300"></span> docker-build: —</span>
+      <span id="pill-sim" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white border border-black/5 text-[12px] font-medium"><span class="dot bg-zinc-300"></span> uav-sim: —</span>
+      <span id="pill-hz" class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white border border-black/5 text-[12px] font-medium">hz: —</span>
+      <button onclick="refreshAll()" class="w-8 h-8 grid place-items-center rounded-full bg-white border border-black/10 hover:bg-zinc-50 text-zinc-600">↻</button>
+    </div>
+  </div>
+</header>
+
+<main class="max-w-[1280px] mx-auto px-6 py-6 space-y-6">
+  <!-- Bento Grid -->
+  <div class="grid grid-cols-12 gap-5">
+    <!-- Build Card -->
+    <div class="col-span-12 lg:col-span-7 card bento bg-white p-5">
+      <div class="flex items-start justify-between">
+        <div>
+          <div class="text-[13px] font-semibold tracking-wide text-zinc-500 uppercase">Docker Build</div>
+          <div class="text-[20px] font-semibold tracking-tight mt-1 flex items-center gap-2"><span id="build-title">uav-sim:humble</span> <span id="build-badge" class="text-[11px] px-2 py-0.5 rounded-full bg-zinc-100 border border-black/5">idle</span></div>
+          <div id="build-path" class="text-[11px] font-mono text-zinc-500 mt-1 truncate max-w-[420px]">—</div>
+        </div>
+        <div class="hidden sm:flex items-center gap-2">
+          <div class="w-[52px] h-[52px] rounded-2xl bg-zinc-900 text-white grid place-items-center"><span id="build-ring" class="text-[11px] font-mono">—</span></div>
+        </div>
+      </div>
+      <div class="mt-4 h-1.5 bg-zinc-100 rounded-full overflow-hidden"><div id="build-bar" class="h-full bg-[#007AFF] rounded-full transition-all" style="width:8%"></div></div>
+      <pre id="build-log" class="mono mt-4 bg-zinc-950 text-zinc-100 rounded-2xl p-3.5 text-[11px] leading-[15px] h-[148px] overflow-auto scrollbar-thin whitespace-pre-wrap break-all">loading…</pre>
+      <div class="mt-3 flex gap-2">
+        <button onclick="copyLog('docker_build')" class="text-[12px] px-3 py-1.5 rounded-full bg-white border border-black/10 hover:bg-zinc-50">复制日志</button>
+        <span id="build-hint" class="text-[11px] text-zinc-500 self-center">后台构建中 · 网络层已走代理 7897</span>
+      </div>
+    </div>
+
+    <!-- Sim Stack Card -->
+    <div class="col-span-12 lg:col-span-5 card bento bg-white p-5">
+      <div class="text-[13px] font-semibold tracking-wide text-zinc-500 uppercase">Sim Stack</div>
+      <div class="mt-2 grid grid-cols-3 gap-3">
+        <div class="rounded-2xl bg-[#F5F5F7] p-3">
+          <div class="text-[11px] text-zinc-500">PX4</div><div id="sim-px4" class="text-[13px] font-semibold">—</div>
+        </div>
+        <div class="rounded-2xl bg-[#F5F5F7] p-3">
+          <div class="text-[11px] text-zinc-500">Gazebo</div><div id="sim-gz" class="text-[13px] font-semibold">—</div>
+        </div>
+        <div class="rounded-2xl bg-[#F5F5F7] p-3">
+          <div class="text-[11px] text-zinc-500">Agent</div><div id="sim-agent" class="text-[13px] font-semibold">—</div>
+        </div>
+      </div>
+      <div class="mt-4 flex items-center gap-2">
+        <span id="sim-dot" class="dot bg-zinc-300"></span><span id="sim-state" class="text-[13px] font-medium">—</span>
+        <span id="sim-hz" class="ml-auto text-[12px] font-mono bg-zinc-900 text-white px-2.5 py-1 rounded-full">hz: —</span>
+      </div>
+      <pre id="sim-log" class="mono mt-3 bg-zinc-950 text-zinc-100 rounded-2xl p-3.5 text-[11px] leading-[15px] h-[108px] overflow-auto scrollbar-thin whitespace-pre-wrap break-all">loading…</pre>
+      <div class="mt-3 flex gap-2">
+        <button id="btn-start" onclick="simAction('start')" class="flex-1 text-[13px] font-medium h-9 rounded-full bg-black text-white hover:bg-zinc-800">Start</button>
+        <button onclick="simAction('stop')" class="flex-1 text-[13px] font-medium h-9 rounded-full bg-white border border-black/10 hover:bg-zinc-50">Stop</button>
+        <button onclick="simAction('restart')" class="text-[13px] px-4 h-9 rounded-full bg-[#007AFF] text-white">Restart</button>
+      </div>
+      <div class="mt-2 text-[11px] text-zinc-500">STACK_INSTANCES=2 · 双机命名空间 /px4_1 隔离</div>
+    </div>
+
+    <!-- Experiments -->
+    <div class="col-span-12 lg:col-span-8 card bento bg-white p-5">
+      <div class="flex items-center justify-between">
+        <div class="text-[13px] font-semibold tracking-wide text-zinc-500 uppercase">Experiments</div>
+        <span id="exp-count" class="text-[11px] px-2 py-1 rounded-full bg-zinc-100">—</span>
+      </div>
+      <div class="mt-3 overflow-auto rounded-2xl border border-black/5">
+        <table class="w-full text-[12px]">
+          <thead class="bg-[#F5F5F7] text-zinc-500"><tr><th class="text-left font-medium px-3 py-2">ID</th><th class="text-left font-medium px-3 py-2">类型</th><th class="text-left font-medium px-3 py-2">结果</th><th class="text-left font-medium px-3 py-2">时间</th></tr></thead>
+          <tbody id="exp-tbody" class="divide-y divide-black/5"></tbody>
+        </table>
+      </div>
+      <div class="mt-3 text-[11px] text-zinc-500">最近 30 条 · 血缘写入 metadata.json · <span class="underline cursor-pointer" onclick="openTab('ros')">查看 ROS 日志</span></div>
+    </div>
+
+    <!-- System -->
+    <div class="col-span-12 lg:col-span-4 card bento bg-white p-5">
+      <div class="text-[13px] font-semibold tracking-wide text-zinc-500 uppercase">System</div>
+      <div class="mt-3 space-y-3">
+        <div class="flex items-center justify-between text-[12px]"><span class="text-zinc-500">CPU</span><span id="sys-cpu" class="font-mono">—</span></div>
+        <div class="h-1.5 bg-zinc-100 rounded-full overflow-hidden"><div id="bar-cpu" class="h-full bg-black rounded-full" style="width:12%"></div></div>
+        <div class="flex items-center justify-between text-[12px]"><span class="text-zinc-500">Memory</span><span id="sys-mem" class="font-mono">—</span></div>
+        <div class="h-1.5 bg-zinc-100 rounded-full overflow-hidden"><div id="bar-mem" class="h-full bg-[#007AFF] rounded-full" style="width:12%"></div></div>
+        <div class="flex items-center justify-between text-[12px]"><span class="text-zinc-500">Disk free</span><span id="sys-disk" class="font-mono">—</span></div>
+        <div class="flex items-center justify-between text-[12px]"><span class="text-zinc-500">Load</span><span id="sys-load" class="font-mono">—</span></div>
+      </div>
+      <div class="mt-4 rounded-2xl bg-zinc-950 text-zinc-300 p-3 text-[11px] leading-relaxed">
+        <div class="font-medium text-white">镜像</div><div id="docker-images" class="mono text-[11px] mt-1 whitespace-pre-wrap break-all leading-[14px]">—</div>
+        <div class="mt-2 font-medium text-white">容器</div><div id="docker-ps" class="mono text-[11px] whitespace-pre-wrap break-all">—</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Log Viewer -->
+  <div class="card bento bg-white p-5">
+    <div class="flex flex-wrap items-center gap-2">
+      <div class="text-[13px] font-semibold tracking-wide text-zinc-500 uppercase">Logs</div>
+      <div class="ml-auto flex items-center gap-1.5 bg-[#F5F5F7] p-1 rounded-full">
+        <button data-tab="docker_build" class="tab-btn px-3 py-1.5 rounded-full text-[12px] font-medium bg-white shadow-sm">docker_build</button>
+        <button data-tab="sim" class="tab-btn px-3 py-1.5 rounded-full text-[12px] font-medium">sim</button>
+        <button data-tab="ros" class="tab-btn px-3 py-1.5 rounded-full text-[12px] font-medium">ros</button>
+        <button data-tab="px4" class="tab-btn px-3 py-1.5 rounded-full text-[12px] font-medium">px4</button>
+      </div>
+      <label class="ml-2 flex items-center gap-1.5 text-[12px]"><input id="auto-refresh" type="checkbox" checked class="accent-black"> 自动刷新</label>
+      <label class="flex items-center gap-1.5 text-[12px]"><input id="follow" type="checkbox" checked class="accent-black"> 跟随</label>
+      <button onclick="copyLog(currentTab)" class="text-[12px] px-3 py-1.5 rounded-full bg-white border border-black/10">复制</button>
+    </div>
+    <div id="log-meta" class="text-[11px] font-mono text-zinc-500 mt-3 truncate">—</div>
+    <pre id="log-body" class="mono mt-2 bg-zinc-950 text-zinc-100 rounded-2xl p-4 text-[11px] leading-[15px] h-[320px] overflow-auto scrollbar-thin whitespace-pre-wrap break-all">loading…</pre>
+    <div class="mt-2 flex items-center gap-2 text-[11px] text-zinc-500">
+      <span>轮询 1.5s · 后端 tail 120 行</span><span class="ml-auto">Workflow root: <span id="wf-root" class="font-mono"></span></span>
+    </div>
+  </div>
+
+  <div class="text-center text-[11px] text-zinc-500 pb-2">Apple-style Monitor · Tailwind + FastAPI · 轮询 · 深色日志终端 · 液态玻璃卡片</div>
+</main>
+
+<script>
+const $ = s=>document.querySelector(s);
+let currentTab='docker_build';
+let timerStatus, timerLogs;
+
+async function jget(url){
+  const r=await fetch(url); if(!r.ok) throw new Error(r.status); return r.json();
+}
+function setDot(el, color, pulse=false){
+  el.className = `dot ${color} ${pulse?'pulse':''}`;
+}
+function setPill(id, text, color){
+  const el=$(id); if(!el) return;
+  const dot=el.querySelector('.dot'); if(dot) dot.className=`dot ${color}`;
+  // keep label after dot
+  const label = el.childNodes[el.childNodes.length-1];
+  if(label && label.nodeType===3) label.textContent=' '+text;
+  else el.lastChild.textContent=' '+text;
+}
+
+async function refreshStatus(){
+  try{
+    const s=await jget('/api/status');
+    // pills
+    const dbActive=s.docker_build.active, simActive=s.sim.active;
+    const hz=s.ros.hz||'—';
+    $('#pill-build').innerHTML=`<span class="dot ${dbActive?'bg-amber-500 pulse':'bg-emerald-500'}"></span> docker-build: ${dbActive?'building':'idle'}`;
+    $('#pill-sim').innerHTML=`<span class="dot ${simActive?'bg-emerald-500 pulse':'bg-zinc-300'}"></span> uav-sim: ${simActive?'active':'inactive'}`;
+    $('#pill-hz').innerHTML=`hz: ${hz}`;
+    // build card
+    const building=dbActive;
+    $('#build-badge').textContent= building ? 'building' : (s.docker_build.success ? 'success' : 'idle');
+    $('#build-badge').className = `text-[11px] px-2 py-0.5 rounded-full border ${building?'bg-amber-100 border-amber-200 text-amber-700': s.docker_build.success?'bg-emerald-100 border-emerald-200 text-emerald-700':'bg-zinc-100 border-black/5'}`;
+    $('#build-path').textContent = s.docker_build.path || '—';
+    $('#build-log').textContent = s.docker_build.log || '(empty)';
+    $('#build-log').scrollTop = $('#build-log').scrollHeight;
+    const pct = building ? '42%' : (s.docker_build.success ? '100%' : '8%');
+    $('#build-bar').style.width = pct;
+    $('#build-ring').textContent = building?'42%': s.docker_build.success?'✓':'—';
+    // sim card
+    $('#sim-state').textContent = simActive ? 'active' : 'inactive';
+    const dotSim=$('#sim-dot'); if(dotSim) dotSim.className=`dot ${simActive?'bg-emerald-500 pulse':'bg-zinc-300'}`;
+    $('#sim-hz').textContent = `hz: ${hz}`;
+    // crude px4/gz presence from sim log tail
+    const simLog=s.sim.log||'';
+    $('#sim-px4').textContent = /uXRCE|px4/i.test(simLog) ? '—' : '—';
+    $('#sim-log').textContent = simLog || '(no sim log yet — start the stack)';
+    $('#sim-log').scrollTop = $('#sim-log').scrollHeight;
+    // system
+    const sys=s.system;
+    const cpu = typeof sys.cpu==='number'? sys.cpu : 0;
+    $('#sys-cpu').textContent = typeof sys.cpu==='number' ? sys.cpu.toFixed(1)+'%' : '—';
+    $('#bar-cpu').style.width = Math.min(100, cpu)+'%';
+    const memPct = (sys.mem_used_gb && sys.mem_total_gb) ? Math.round(sys.mem_used_gb/sys.mem_total_gb*100) : 12;
+    $('#sys-mem').textContent = `${sys.mem_used_gb} / ${sys.mem_total_gb} GB`;
+    $('#bar-mem').style.width = memPct+'%';
+    $('#sys-disk').textContent = sys.disk_free_gb+' GB free';
+    $('#sys-load').textContent = sys.load;
+    $('#docker-images').textContent = s.docker.images || '—';
+    $('#docker-ps').textContent = s.docker.container || '(no container)';
+    $('#wf-root').textContent = s.wf_root || '';
+    // hint
+    const hint = building ? '后台构建中 · 网络层已走代理 7897' : (s.docker_build.success ? '镜像就绪 · 可 docker run' : '等待构建');
+    $('#build-hint').textContent = hint;
+  }catch(e){
+    console.warn(e);
+  }
+}
+async function refreshExps(){
+  try{
+    const r=await jget('/api/experiments');
+    const tb=$('#exp-tbody'); tb.innerHTML='';
+    (r.experiments||[]).forEach(ex=>{
+      const tr=document.createElement('tr');
+      tr.className='hover:bg-zinc-50';
+      tr.innerHTML=`<td class="px-3 py-2 font-mono text-[11px]">${ex.id}</td><td class="px-3 py-2"><span class="px-2 py-1 rounded-full bg-zinc-100 text-[11px]">${ex.type}</span></td><td class="px-3 py-2 font-mono text-[11px]">${ex.reach} ${ex.drift!=='-'?('· '+ex.drift):''}</td><td class="px-3 py-2 text-[11px] text-zinc-500">${ex.mtime}</td>`;
+      tb.appendChild(tr);
+    });
+    $('#exp-count').textContent = (r.experiments||[]).length + ' 条';
+  }catch{}
+}
+async function refreshLog(){
+  if(!$('#auto-refresh').checked) return;
+  try{
+    const r=await jget(`/api/logs?name=${currentTab}&lines=140`);
+    $('#log-meta').textContent = r.path || '';
+    const body=$('#log-body');
+    const atBottom = body.scrollHeight - body.scrollTop - body.clientHeight < 40;
+    body.textContent = r.text || '(empty)';
+    if($('#follow').checked || atBottom) body.scrollTop = body.scrollHeight;
+  }catch{}
+}
+function openTab(name){
+  currentTab=name;
+  document.querySelectorAll('.tab-btn').forEach(b=>{
+    const on=b.dataset.tab===name;
+    b.className = on ? 'tab-btn px-3 py-1.5 rounded-full text-[12px] font-medium bg-white shadow-sm' : 'tab-btn px-3 py-1.5 rounded-full text-[12px] font-medium';
+  });
+  refreshLog();
+}
+async function simAction(a){
+  const btn=$('#btn-start'); if(btn) btn.textContent='…';
+  try{ await fetch(`/api/sim/${a}`,{method:'POST'}); }catch{}
+  setTimeout(refreshStatus, 1200);
+  if(btn) btn.textContent='Start';
+}
+function copyLog(name){
+  const t = name==='docker_build' ? $('#build-log').textContent : (name ? document.querySelector('#log-body').textContent : $('#build-log').textContent);
+  // if name is tab name, use log-body; if docker_build copy build log
+  const src = name==='docker_build' ? $('#build-log').textContent : $('#log-body').textContent;
+  navigator.clipboard.writeText(src).then(()=>{ const b=$('#build-hint'); if(b){ const o=b.textContent; b.textContent='已复制 ✓'; setTimeout(()=>b.textContent=o,1200);} });
+}
+function refreshAll(){ refreshStatus(); refreshExps(); refreshLog(); }
+
+// tabs
+document.querySelectorAll('.tab-btn').forEach(b=> b.addEventListener('click', ()=> openTab(b.dataset.tab)));
+
+// boot
+refreshAll();
+timerStatus=setInterval(refreshStatus, 2200);
+timerLogs=setInterval(refreshLog, 1500);
+setInterval(refreshExps, 6000);
+</script>
+</body>
+</html>
