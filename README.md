@@ -6,7 +6,7 @@
 
 ## 架构总览
 
-![architecture](assets/architecture.svg)
+![architecture](assets/architecture.png)
 
 ## 验证里程碑（原生与容器内同口径）
 
