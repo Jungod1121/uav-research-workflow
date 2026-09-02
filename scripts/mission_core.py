@@ -67,12 +67,14 @@ class OffboardMission(Node):
             rclpy.spin_once(self, timeout_sec=0.05)
 
     # ---------- 官方契约: 心跳 + 设定点 ----------
-    def heartbeat(self, sp=None):
+    def heartbeat(self, sp=None, vel=None, acc=None):
         m = OffboardControlMode(); m.position = True
         m.timestamp = int(self.get_clock().now().nanoseconds / 1000)
         self.mode_pub.publish(m)
         if sp is not None:
             s = TrajectorySetpoint(); s.position = [float(sp[0]), float(sp[1]), -abs(float(sp[2]))]; s.yaw = 0.0
+            if vel is not None: s.velocity = [float(vel[0]), float(vel[1]), -float(vel[2])]
+            if acc is not None: s.acceleration = [float(acc[0]), float(acc[1]), -float(acc[2])]
             s.timestamp = m.timestamp
             self.sp_pub.publish(s)
 
