@@ -1,0 +1,11 @@
+stdin is not a terminal device. Keyboard handling disabled.[INFO] [1788516274.559412532] [rosbag2_recorder]: Press SPACE for pausing/resuming
+[INFO] [1788516274.560969384] [rosbag2_storage]: Opened database 'experiments/v25-ego-l2-bag/bags/flight/flight_0.db3' for READ_WRITE.
+[INFO] [1788516274.561845666] [rosbag2_recorder]: Listening for topics...
+[INFO] [1788516274.561856055] [rosbag2_recorder]: Event publisher thread: Starting
+[INFO] [1788516274.568298549] [rosbag2_recorder]: Subscribed to topic '/drone_0_planning/pos_cmd'
+[INFO] [1788516274.568382043] [rosbag2_recorder]: Recording...
+[INFO] [1788516274.671909232] [rosbag2_recorder]: Subscribed to topic '/fmu/out/vehicle_local_position'
+[INFO] [1788516274.671971297] [rosbag2_recorder]: All requested topics are subscribed. Stopping discovery...
+[INFO] [1788516385.747565794] [rosbag2_cpp]: Writing remaining messages from cache to the bag. It may take a while
+[INFO] [1788516385.748586147] [rosbag2_recorder]: Event publisher thread: Exiting
+[INFO] [1788516385.748652619] [rosbag2_recorder]: Recording stopped

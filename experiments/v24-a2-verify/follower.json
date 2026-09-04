@@ -1,0 +1,43 @@
+{
+  "events": [
+    {
+      "t": 10.12,
+      "e": "nav=4"
+    },
+    {
+      "t": 10.12,
+      "e": "prestream_start"
+    },
+    {
+      "t": 12.64,
+      "e": "nav=14"
+    },
+    {
+      "t": 12.65,
+      "e": "following_start"
+    },
+    {
+      "t": 72.65,
+      "e": "following_done"
+    },
+    {
+      "t": 72.67,
+      "e": "nav=18"
+    },
+    {
+      "t": 78.68,
+      "e": "land_cmd_sent"
+    }
+  ],
+  "namespace": "px4_1",
+  "mav_sys_id": 2,
+  "tracking": {
+    "offset": [
+      2.0,
+      0.0
+    ],
+    "samples": 12120,
+    "err_mean_m": 0.171,
+    "err_max_m": 2.067
+  }
+}

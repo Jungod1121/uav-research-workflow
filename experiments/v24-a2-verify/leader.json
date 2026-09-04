@@ -1,0 +1,175 @@
+{
+  "events": [
+    {
+      "t": 0.0,
+      "e": "position_valid"
+    },
+    {
+      "t": 0.08,
+      "e": "nav=4"
+    },
+    {
+      "t": 10.02,
+      "e": "ekf_settle_done"
+    },
+    {
+      "t": 10.02,
+      "e": "prestream_start"
+    },
+    {
+      "t": 11.54,
+      "e": "offboard_ack=0"
+    },
+    {
+      "t": 11.55,
+      "e": "nav=14"
+    },
+    {
+      "t": 11.55,
+      "e": "arm_ack=0"
+    },
+    {
+      "t": 29.92,
+      "e": "nav=18"
+    },
+    {
+      "t": 35.92,
+      "e": "land_cmd_sent"
+    }
+  ],
+  "namespace": "",
+  "mav_sys_id": 1,
+  "waypoints": [
+    {
+      "wp": 1,
+      "target": [
+        0.72,
+        -0.0
+      ],
+      "reached": true,
+      "err_m": 0.343,
+      "t": 15.44
+    },
+    {
+      "wp": 2,
+      "target": [
+        1.47,
+        -0.0
+      ],
+      "reached": true,
+      "err_m": 0.343,
+      "t": 16.36
+    },
+    {
+      "wp": 3,
+      "target": [
+        2.22,
+        -0.0
+      ],
+      "reached": true,
+      "err_m": 0.347,
+      "t": 17.68
+    },
+    {
+      "wp": 4,
+      "target": [
+        2.97,
+        0.75
+      ],
+      "reached": true,
+      "err_m": 0.347,
+      "t": 19.08
+    },
+    {
+      "wp": 5,
+      "target": [
+        2.97,
+        1.5
+      ],
+      "reached": true,
+      "err_m": 0.341,
+      "t": 20.18
+    },
+    {
+      "wp": 6,
+      "target": [
+        2.97,
+        2.25
+      ],
+      "reached": true,
+      "err_m": 0.345,
+      "t": 21.3
+    },
+    {
+      "wp": 7,
+      "target": [
+        2.22,
+        3.0
+      ],
+      "reached": true,
+      "err_m": 0.348,
+      "t": 22.66
+    },
+    {
+      "wp": 8,
+      "target": [
+        1.47,
+        3.0
+      ],
+      "reached": true,
+      "err_m": 0.345,
+      "t": 23.86
+    },
+    {
+      "wp": 9,
+      "target": [
+        0.72,
+        3.0
+      ],
+      "reached": true,
+      "err_m": 0.345,
+      "t": 24.98
+    },
+    {
+      "wp": 10,
+      "target": [
+        -0.03,
+        2.25
+      ],
+      "reached": true,
+      "err_m": 0.348,
+      "t": 26.36
+    },
+    {
+      "wp": 11,
+      "target": [
+        -0.03,
+        1.5
+      ],
+      "reached": true,
+      "err_m": 0.348,
+      "t": 27.66
+    },
+    {
+      "wp": 12,
+      "target": [
+        -0.03,
+        0.75
+      ],
+      "reached": true,
+      "err_m": 0.34,
+      "t": 28.78
+    },
+    {
+      "wp": 13,
+      "target": [
+        -0.03,
+        -0.0
+      ],
+      "reached": true,
+      "err_m": 0.349,
+      "t": 29.9
+    }
+  ],
+  "reached": "13/13"
+}

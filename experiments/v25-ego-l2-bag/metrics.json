@@ -1,0 +1,70 @@
+{
+  "events": [
+    {
+      "t": 8.4,
+      "e": "preflight_done"
+    },
+    {
+      "t": 8.4,
+      "e": "nav=14"
+    },
+    {
+      "t": 8.4,
+      "e": "ego_stream_live"
+    },
+    {
+      "t": 8.4,
+      "e": "ego_rebase_done"
+    },
+    {
+      "t": 8.4,
+      "e": "prestream_start"
+    },
+    {
+      "t": 9.92,
+      "e": "offboard_ack=0"
+    },
+    {
+      "t": 9.93,
+      "e": "arm_ack=0"
+    },
+    {
+      "t": 9.93,
+      "e": "tracking_start"
+    },
+    {
+      "t": 16.98,
+      "e": "converged"
+    },
+    {
+      "t": 99.95,
+      "e": "tracking_done"
+    },
+    {
+      "t": 99.98,
+      "e": "nav=18"
+    },
+    {
+      "t": 105.17,
+      "e": "nav=14"
+    },
+    {
+      "t": 105.98,
+      "e": "land_cmd_sent"
+    }
+  ],
+  "namespace": "",
+  "mav_sys_id": 1,
+  "ego_origin_enu": [
+    12.127,
+    1.065,
+    0.983
+  ],
+  "tracking": {
+    "samples": 4330,
+    "converge_s": 8.0,
+    "err_mean_m": 0.236,
+    "err_max_m": 0.899,
+    "err_p95_m": 0.637
+  }
+}
