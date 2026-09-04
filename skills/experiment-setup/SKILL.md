@@ -84,3 +84,12 @@ ros2 topic list | grep /fmu   # 有输出 = PX4↔ROS2 通了
 ## 变更日志
 
 - 2026-08-24 初始钉版：Humble + Harmonic + PX4 v1.16（workflow 初建）
+
+### L2.5 真深度闭环坑 (2026-09-04, v28)
+- **PX4_GZ_WORLD 内部名必须等于文件名**: rcS 等待 `/world/<文件名>/scene/info`, 名字不一致则 PX4 永远卡 "Waiting for Gazebo world" (0% CPU, lockstep 空等)
+- **孤儿进程竞态**: PX4 崩溃 (exit 255) 后 gz/agent 常成孤儿; 重启栈时 rcS 探到 "already running world" 会复用垂死 gz → 必须先 `pkill -f "gz si[m]"` 等全部清零再启动
+- **pkill 自匹配**: 同一命令行含目标字面量时会自杀; 用 `pkill -f "gz si[m]"` 括号技巧且目标字面量不得出现在同一命令行
+- **/traj_start_trigger 是 geometry_msgs/PoseStamped** (非 Empty); FSM 在 WAIT_TARGET 静默丢弃类型不匹配的触发
+- **ros2 CLI wait-set 报错**: daemon 中毒后 `ros2 daemon stop` 仍可能报 rcl context 错 → 用 python 一次性订阅探测代替 CLI
+- **世界级 plugin 声明会屏蔽 server.config 默认系统**; PX4 世界不含系统插件 (模型级传感器自持), 自建世界以 default.sdf 为骨架最稳
+- ros_gz 源码构建 (humble+harmonic): 需补 actuator_msgs(rudislabs)/gps_umd(swri)/vision_msgs(ros-perception 注意非 ros2 org), 跳过 gpsd_client/gps_tools/gps_umd/vision_msgs_rviz_plugins
