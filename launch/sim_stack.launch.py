@@ -27,7 +27,9 @@ PX4_ENV = {
     "PX4_GZ_NO_FOLLOW": "1",
     "ROS_DOMAIN_ID": "77",
     "GZ_VERSION": "harmonic",
-    "GZ_IP": "127.0.0.1",  # gz-transport 发现统一回环: 组播在本机 rt_offload_failed 不可靠
+    "GZ_IP": "127.0.0.1",
+    "GZ_IP": "127.0.0.1",  # gz-transport 发现统一回环
+    "PX4_GZ_WORLD": os.environ.get("STACK_GZ_WORLD", "default"),
     "FASTDDS_BUILTIN_TRANSPORTS": "UDPv4",  # 禁 SHM: pkill 残段会让 DDS 数据交换间歇性挂起
 }
 
