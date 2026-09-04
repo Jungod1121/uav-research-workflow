@@ -21,7 +21,7 @@ HEADLESS = os.environ.get("STACK_HEADLESS", "1")  # 1=仅 server; 0=rcS 另起 G
 INSTANCES = int(os.environ.get("STACK_INSTANCES", "1"))  # 1=单机; 2=双机(官方 -i/namespace 约定)
 
 PX4_ENV = {
-    "PX4_SIM_MODEL": "gz_x500",
+    "PX4_SIM_MODEL": os.environ.get("STACK_PX4_MODEL", "gz_x500"),
     "PX4_SYS_AUTOSTART": "4001",
     "HEADLESS": HEADLESS,
     "PX4_GZ_NO_FOLLOW": "1",
