@@ -28,7 +28,9 @@ def main():
     height = float(kv.get("height", 2.0))       # 起飞悬停高度
     track_s = float(kv.get("track_s", 60))      # 跟随时长
     converge_s = float(kv.get("converge_s", 8)) # 收敛窗口(不计入统计)
-    ego_hz_min = float(kv.get("ego_hz_min", 30))  # ego 命令流最低频率
+    ego_hz_min = float(kv.get("ego_hz_min", 30))
+    loop_dt = float(kv.get("loop_dt", 0.02))   # 命令环周期: 0.005≈200Hz (基线 0.02≈50Hz)
+    tau = float(kv.get("tau", 0.0))            # 速度外推前馈: 目标位置 += vel*tau  # ego 命令流最低频率
 
     rclpy.init()
     m = OffboardMission("ego_tracker")
@@ -84,11 +86,11 @@ def main():
     while time.time() < end and rclpy.ok():
         if ego["pos"] is None:
             rclpy.spin_once(m, timeout_sec=0.05); continue
-        ex = ego["pos"][0] - origin[0]   # 重定基: ego 世界 -> PX4 帧
-        ey = ego["pos"][1] - origin[1]
-        ez = ego["pos"][2]
+        ex = ego["pos"][0] - origin[0] + ego["vel"][0] * tau   # 重定基 + 速度外推
+        ey = ego["pos"][1] - origin[1] + ego["vel"][1] * tau
+        ez = ego["pos"][2] + ego["vel"][2] * tau
         m.heartbeat((ex, ey, ez), vel=ego["vel"], acc=ego["acc"])
-        rclpy.spin_once(m, timeout_sec=0.02)
+        rclpy.spin_once(m, timeout_sec=loop_dt)
         if m.pos:
             px, py, pz = m.pos.x, m.pos.y, m.pos.z
             err = math.sqrt((px-ex)**2 + (py-ey)**2 + (pz+ez)**2)  # pz=NED(z向下), ez=ENU(z向上): 实际高度=pz+ez
