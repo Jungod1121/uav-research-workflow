@@ -40,7 +40,6 @@ def main():
     if not f.pos:
         print("MISSION_FAILED follower_no_position"); return 1
     time.sleep(10)  # EKF
-    fx0, fy0 = f.pos.x, f.pos.y
 
     # 等 Leader 起飞(其位置开始变化或直接用当前位置)
     deadline = time.time() + 40
