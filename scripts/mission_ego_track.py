@@ -30,7 +30,8 @@ def main():
     converge_s = float(kv.get("converge_s", 8)) # 收敛窗口(不计入统计)
     ego_hz_min = float(kv.get("ego_hz_min", 30))
     loop_dt = float(kv.get("loop_dt", 0.02))   # 命令环周期: 0.005≈200Hz (基线 0.02≈50Hz)
-    tau = float(kv.get("tau", 0.0))            # 速度外推前馈: 目标位置 += vel*tau  # ego 命令流最低频率
+    tau = float(kv.get("tau", 0.0))            # 速度外推前馈: 目标位置 += vel*tau
+    acc_ff = kv.get("acc_ff", "1") != "0"      # 加速度前馈开关 (R2 用)  # ego 命令流最低频率
 
     rclpy.init()
     m = OffboardMission("ego_tracker")
@@ -66,14 +67,33 @@ def main():
     m.metrics["events"].append({"t": m.t(), "e": "ego_stream_live"})
     print(f"ego 命令流活跃, 首条命令 ({ego['pos'][0]:.2f}, {ego['pos'][1]:.2f}, {ego['pos'][2]:.2f})")
 
-    # 轨迹重定基: 以 ego 首条命令为原点, 消除框架偏移 (纯跟踪质量度量)
-    origin = ego["pos"]
+    # 轨迹重定基: rebase=1 (v23, ego世界≠PX4世界) | rebase=0 (L2.5, 共享世界, ego目标即绝对坐标)
+    if kv.get("rebase", "1") == "1":
+        origin = ego["pos"]
+    else:
+        origin = (0.0, 0.0, 0.0)
     m.metrics["ego_origin_enu"] = [round(origin[0],3), round(origin[1],3), round(origin[2],3)]
     m.metrics["events"].append({"t": m.t(), "e": "ego_rebase_done"})
 
+    # 动态门控: 等 ego 命令开始移动 (计划执行开始), PX4 保持地面
+    m.metrics["events"].append({"t": m.t(), "e": "wait_dynamic_start"})
+    ref = ego["pos"]
+    deadline = time.time() + 120
+    while time.time() < deadline:
+        rclpy.spin_once(m, timeout_sec=0.05)
+        if ego["pos"] is None: continue
+        d = math.dist(ego["pos"], ref)
+        if d > 0.3:
+            break
+        if int(time.time()) % 5 == 0 and ego["pos"] != ref:
+            ref = ego["pos"]
+    else:
+        m.land_and_finish(out, height); print("MISSION_FAILED ego_never_moved"); return 1
+    m.metrics["events"].append({"t": m.t(), "e": "ego_plan_moving"})
+
     # 起飞+切入: 以重定基后的当前命令(≈原点)为初始设定点
     sp0 = (ego["pos"][0]-origin[0], ego["pos"][1]-origin[1])
-    ok = m.arm_and_engage(sp0, height)
+    ok = m.arm_and_engage(sp0, max(ego["pos"][2], 0.3))  # 跟随计划当前z (计划从地面爬升)
     if not ok:
         m.land_and_finish(out, height); print("MISSION_FAILED engage"); return 1
     m.metrics["events"].append({"t": m.t(), "e": "tracking_start"})
@@ -81,6 +101,7 @@ def main():
     # 跟随环: 命令 = ego pos_cmd (ENU→NED 映射在 heartbeat 内完成), 带 vel/acc 前馈
     errs, errs_conv, csv = [], [], ["t,px,py,pz,ex,ey,ez,err"]
     conv_cnt, conv_started = 0, False
+    last_move_t, last_pos = time.time(), ego["pos"]
     t0 = time.time()
     end = t0 + track_s
     while time.time() < end and rclpy.ok():
@@ -89,7 +110,7 @@ def main():
         ex = ego["pos"][0] - origin[0] + ego["vel"][0] * tau   # 重定基 + 速度外推
         ey = ego["pos"][1] - origin[1] + ego["vel"][1] * tau
         ez = ego["pos"][2] + ego["vel"][2] * tau
-        m.heartbeat((ex, ey, ez), vel=ego["vel"], acc=ego["acc"])
+        m.heartbeat((ex, ey, ez), vel=ego["vel"], acc=ego["acc"] if acc_ff else None)
         rclpy.spin_once(m, timeout_sec=loop_dt)
         if m.pos:
             px, py, pz = m.pos.x, m.pos.y, m.pos.z

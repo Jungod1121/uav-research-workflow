@@ -1,0 +1,654 @@
+[INFO] [launch]: All log files can be found below /home/jungod/.ros/log/2026-09-04-20-48-20-977035-jungod-asus-tuf-gaming-a15-110993
+[INFO] [launch]: Default logging verbosity is set to INFO
+[INFO] [ego_planner_node-1]: process started with pid [111012]
+[INFO] [traj_server-2]: process started with pid [111014]
+[ego_planner_node-1] hit: 0.619039
+[ego_planner_node-1] miss: -0.619039
+[ego_planner_node-1] min log: -1.99243
+[ego_planner_node-1] max: 2.19722
+[ego_planner_node-1] thresh log: 1.38629
+[ego_planner_node-1] [INFO] [1788526101.285671268] [drone_0_ego_planner_node]: Wait for 1 second.
+[ego_planner_node-1] [FSM]: from INIT to WAIT_TARGET
+[traj_server-2] [WARN] [1788526102.080994823] [drone_0_traj_server]: [Traj server]: ready.
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] wait for goal or trigger.
+[ego_planner_node-1] [WARN] [1788526102.450064925] [drone_0_ego_planner_node]: Waiting for trigger from [n3ctrl] from RC
+[ego_planner_node-1] [TRIG]: from WAIT_TARGET to GEN_NEW_TRAJ
+[ego_planner_node-1] [47;30m
+[ego_planner_node-1] [drone 0 replan 0]==============================================[0m
+[ego_planner_node-1] [32miter(+1)=49,time(ms)=0.117,total_t(ms)=0.117,cost=0.047
+[ego_planner_node-1] [0mplan_success=1
+[ego_planner_node-1] total time:[42m0.000181564[0m,optimize:0.00017974,refine:1.824e-06,avg_time=0.000181564
+[ego_planner_node-1] refine_success=1
+[ego_planner_node-1] [FSM]: from GEN_NEW_TRAJ to EXEC_TRAJ
+[ego_planner_node-1] [FSM]: state: EXEC_TRAJ
+[ego_planner_node-1] [FSM]: from EXEC_TRAJ to REPLAN_TRAJ
+[ego_planner_node-1] [47;30m
+[ego_planner_node-1] [drone 0 replan 1]==============================================[0m
+[ego_planner_node-1] [32miter(+1)=30,time(ms)=0.055,total_t(ms)=0.056,cost=0.036
+[ego_planner_node-1] [0mplan_success=1
+[ego_planner_node-1] total time:[42m0.000122201[0m,optimize:0.000120478,refine:1.723e-06,avg_time=0.000151883
+[ego_planner_node-1] refine_success=1
+[ego_planner_node-1] [FSM]: from REPLAN_TRAJ to EXEC_TRAJ
+[ego_planner_node-1] [FSM]: state: EXEC_TRAJ
+[ego_planner_node-1] [FSM]: from EXEC_TRAJ to REPLAN_TRAJ
+[ego_planner_node-1] [47;30m
+[ego_planner_node-1] [drone 0 replan 2]==============================================[0m
+[ego_planner_node-1] [32miter(+1)=8,time(ms)=0.036,total_t(ms)=0.037,cost=0.017
+[ego_planner_node-1] [0mplan_success=1
+[ego_planner_node-1] total time:[42m9.0481e-05[0m,optimize:8.8968e-05,refine:1.513e-06,avg_time=0.000131415
+[ego_planner_node-1] refine_success=1
+[ego_planner_node-1] [FSM]: from REPLAN_TRAJ to EXEC_TRAJ
+[ego_planner_node-1] [FSM]: state: EXEC_TRAJ
+[ego_planner_node-1] [FSM]: from EXEC_TRAJ to REPLAN_TRAJ
+[ego_planner_node-1] [47;30m
+[ego_planner_node-1] [drone 0 replan 3]==============================================[0m
+[ego_planner_node-1] [32miter(+1)=5,time(ms)=0.014,total_t(ms)=0.014,cost=0.005
+[ego_planner_node-1] [0mplan_success=1
+[ego_planner_node-1] total time:[42m7.6164e-05[0m,optimize:7.4721e-05,refine:1.443e-06,avg_time=0.000117602
+[ego_planner_node-1] refine_success=1
+[ego_planner_node-1] [FSM]: from REPLAN_TRAJ to EXEC_TRAJ
+[ego_planner_node-1] [FSM]: state: EXEC_TRAJ
+[ego_planner_node-1] [FSM]: from EXEC_TRAJ to REPLAN_TRAJ
+[ego_planner_node-1] [47;30m
+[ego_planner_node-1] [drone 0 replan 4]==============================================[0m
+[ego_planner_node-1] [32miter(+1)=8,time(ms)=0.020,total_t(ms)=0.020,cost=0.004
+[ego_planner_node-1] [0mplan_success=1
+[ego_planner_node-1] total time:[42m8.0523e-05[0m,optimize:7.909e-05,refine:1.433e-06,avg_time=0.000110187
+[ego_planner_node-1] refine_success=1
+[ego_planner_node-1] [FSM]: from REPLAN_TRAJ to EXEC_TRAJ
+[ego_planner_node-1] [FSM]: state: EXEC_TRAJ
+[ego_planner_node-1] [FSM]: from EXEC_TRAJ to REPLAN_TRAJ
+[ego_planner_node-1] [47;30m
+[ego_planner_node-1] [drone 0 replan 5]==============================================[0m
+[ego_planner_node-1] [32miter(+1)=5,time(ms)=0.030,total_t(ms)=0.030,cost=0.007
+[ego_planner_node-1] [0mplan_success=1
+[ego_planner_node-1] total time:[42m0.000127812[0m,optimize:0.000125768,refine:2.044e-06,avg_time=0.000113124
+[ego_planner_node-1] refine_success=1
+[ego_planner_node-1] [FSM]: from REPLAN_TRAJ to EXEC_TRAJ
+[ego_planner_node-1] [FSM]: state: EXEC_TRAJ
+[ego_planner_node-1] [FSM]: from EXEC_TRAJ to REPLAN_TRAJ
+[ego_planner_node-1] [47;30m
+[ego_planner_node-1] [drone 0 replan 6]==============================================[0m
+[ego_planner_node-1] [32miter(+1)=9,time(ms)=0.014,total_t(ms)=0.014,cost=0.029
+[ego_planner_node-1] [0mplan_success=1
+[ego_planner_node-1] total time:[42m6.2719e-05[0m,optimize:6.1637e-05,refine:1.082e-06,avg_time=0.000105923
+[ego_planner_node-1] refine_success=1
+[ego_planner_node-1] [FSM]: from REPLAN_TRAJ to EXEC_TRAJ
+[ego_planner_node-1] [FSM]: state: EXEC_TRAJ
+[ego_planner_node-1] [FSM]: from EXEC_TRAJ to REPLAN_TRAJ
+[ego_planner_node-1] [47;30m
+[ego_planner_node-1] [drone 0 replan 7]==============================================[0m
+[ego_planner_node-1] [32miter(+1)=10,time(ms)=0.044,total_t(ms)=0.045,cost=0.039
+[ego_planner_node-1] [0mplan_success=1
+[ego_planner_node-1] total time:[42m0.000133513[0m,optimize:0.000131599,refine:1.914e-06,avg_time=0.000109372
+[ego_planner_node-1] refine_success=1
+[ego_planner_node-1] [FSM]: from REPLAN_TRAJ to EXEC_TRAJ
+[ego_planner_node-1] [FSM]: state: EXEC_TRAJ
+[ego_planner_node-1] [FSM]: from EXEC_TRAJ to REPLAN_TRAJ
+[ego_planner_node-1] [47;30m
+[ego_planner_node-1] [drone 0 replan 8]==============================================[0m
+[ego_planner_node-1] [32miter(+1)=11,time(ms)=0.015,total_t(ms)=0.015,cost=0.022
+[ego_planner_node-1] [0mplan_success=1
+[ego_planner_node-1] total time:[42m6.5112e-05[0m,optimize:6.375e-05,refine:1.362e-06,avg_time=0.000104454
+[ego_planner_node-1] refine_success=1
+[ego_planner_node-1] [FSM]: from REPLAN_TRAJ to EXEC_TRAJ
+[ego_planner_node-1] [FSM]: state: EXEC_TRAJ
+[ego_planner_node-1] [FSM]: from EXEC_TRAJ to REPLAN_TRAJ
+[ego_planner_node-1] [47;30m
+[ego_planner_node-1] [drone 0 replan 9]==============================================[0m
+[ego_planner_node-1] [32miter(+1)=10,time(ms)=0.015,total_t(ms)=0.015,cost=0.037
+[ego_planner_node-1] [0mplan_success=1
+[ego_planner_node-1] total time:[42m4.6679e-05[0m,optimize:4.5406e-05,refine:1.273e-06,avg_time=9.86768e-05
+[ego_planner_node-1] refine_success=1
+[ego_planner_node-1] [FSM]: from REPLAN_TRAJ to EXEC_TRAJ
+[ego_planner_node-1] [FSM]: state: EXEC_TRAJ
+[ego_planner_node-1] [FSM]: from EXEC_TRAJ to REPLAN_TRAJ
+[ego_planner_node-1] [47;30m
+[ego_planner_node-1] [drone 0 replan 10]==============================================[0m
+[ego_planner_node-1] [32miter(+1)=12,time(ms)=0.031,total_t(ms)=0.031,cost=0.034
+[ego_planner_node-1] [0mplan_success=1
+[ego_planner_node-1] total time:[42m6.6917e-05[0m,optimize:6.5534e-05,refine:1.383e-06,avg_time=9.57895e-05
+[ego_planner_node-1] refine_success=1
+[ego_planner_node-1] [FSM]: from REPLAN_TRAJ to EXEC_TRAJ
+[ego_planner_node-1] [FSM]: state: EXEC_TRAJ
+[ego_planner_node-1] [FSM]: from EXEC_TRAJ to REPLAN_TRAJ
+[ego_planner_node-1] [47;30m
+[ego_planner_node-1] [drone 0 replan 11]==============================================[0m
+[ego_planner_node-1] [32miter(+1)=7,time(ms)=0.017,total_t(ms)=0.017,cost=0.038
+[ego_planner_node-1] [0mplan_success=1
+[ego_planner_node-1] total time:[42m5.0697e-05[0m,optimize:4.9284e-05,refine:1.413e-06,avg_time=9.20318e-05
+[ego_planner_node-1] refine_success=1
+[ego_planner_node-1] [FSM]: from REPLAN_TRAJ to EXEC_TRAJ
+[ego_planner_node-1] [FSM]: state: EXEC_TRAJ
+[ego_planner_node-1] [FSM]: state: EXEC_TRAJ
+[ego_planner_node-1] [TRIG]: from EXEC_TRAJ to REPLAN_TRAJ
+[ego_planner_node-1] [FSM]: from REPLAN_TRAJ to WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET
+[ego_planner_node-1] [FSM]: state: WAIT_TARGET

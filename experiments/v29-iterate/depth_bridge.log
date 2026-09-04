@@ -1,0 +1,2 @@
+[INFO] [1788522404.563045116] [depth_bridge_px4]: Creating GZ->ROS Bridge: [/depth_camera (gz.msgs.Image) -> /depth_camera (sensor_msgs/msg/Image)] (Lazy 0)
+[INFO] [1788523161.758625161] [rclcpp]: signal_handler(SIGINT/SIGTERM)
